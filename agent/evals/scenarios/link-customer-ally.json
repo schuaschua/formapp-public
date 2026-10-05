@@ -1,0 +1,94 @@
+{
+  "id": "link-customer-ally",
+  "description": "Story 5.2: once the insurance agent confirms a match-list number, the agent calls link_customer for that candidate and never asks for a C-field one by one afterwards -- every particular is already filled from the customer record (owner's 2026-09-27 requirement).",
+  "input": "My customer is Ally Macbeal, born 20th November 1994. Yes, that's customer 1.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Ally",
+          "C13": "Macbeal",
+          "C2": "1994-11-20"
+        }
+      }
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20"
+      }
+    },
+    {
+      "name": "link_customer",
+      "arguments": {
+        "customer_id": "00000000-0000-4000-8000-000000000001"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "patch_draft": {
+      "applied": [
+        "C1",
+        "C13",
+        "C2"
+      ],
+      "errors": [],
+      "revision": 2
+    },
+    "find_customer": [
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000001",
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20",
+        "city": "Petaling Jaya"
+      }
+    ],
+    "link_customer": {
+      "customer_id": "00000000-0000-4000-8000-000000000001",
+      "applied": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9",
+        "C10",
+        "C11",
+        "C12",
+        "C13",
+        "C14",
+        "C15"
+      ],
+      "skipped": [],
+      "revision": 3
+    }
+  },
+  "forbidden_answer_keys": [
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "C10",
+    "C11",
+    "C12",
+    "C14",
+    "C15"
+  ]
+}

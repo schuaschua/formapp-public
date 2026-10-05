@@ -1,0 +1,711 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:formapp:form-schema:v1",
+  "title": "formapp life insurance proposal, version 1",
+  "type": "object",
+  "properties": {
+    "N1": {
+      "title": "What type of product are you looking for?",
+      "type": "string",
+      "enum": [
+        "life",
+        "life_health",
+        "health"
+      ],
+      "x-labels": {
+        "life": "Life",
+        "life_health": "Life + Health",
+        "health": "Health"
+      },
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Type of cover"
+    },
+    "N2": {
+      "title": "What is your approximate annual budget for premiums?",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 100000000,
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Yearly budget"
+    },
+    "N3": {
+      "title": "Should the policy cover your dependents?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Dependents"
+    },
+    "N4": {
+      "title": "How many dependents?",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Number of dependents"
+    },
+    "N5": {
+      "title": "Desired coverage amount (sum assured)",
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 100000000,
+      "x-page": 1,
+      "x-fill": "infer"
+    },
+    "N6": {
+      "title": "Have you used tobacco or nicotine products in the last 12 months?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Tobacco use"
+    },
+    "N7": {
+      "title": "Type and daily amount of tobacco/nicotine",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Tobacco type and amount"
+    },
+    "N8": {
+      "title": "Is the insured planning a pregnancy in the next 12 months?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 1,
+      "x-fill": "ask",
+      "x-checklist-label": "Pregnancy plans"
+    },
+    "P1": {
+      "title": "Selected product",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "x-page": 2,
+      "x-fill": "infer"
+    },
+    "P2": {
+      "title": "Optional riders",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 50
+      },
+      "uniqueItems": true,
+      "x-page": 2,
+      "x-fill": "infer"
+    },
+    "P3": {
+      "title": "Policy term",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "x-page": 2,
+      "x-fill": "infer"
+    },
+    "Y1": {
+      "title": "Payment frequency",
+      "type": "string",
+      "enum": [
+        "monthly",
+        "yearly"
+      ],
+      "x-labels": {
+        "monthly": "Monthly",
+        "yearly": "Yearly"
+      },
+      "x-page": 3,
+      "x-fill": "infer"
+    },
+    "Y2": {
+      "title": "Payment method",
+      "type": "string",
+      "enum": [
+        "credit_card",
+        "direct_debit"
+      ],
+      "x-labels": {
+        "credit_card": "Credit card",
+        "direct_debit": "Direct debit"
+      },
+      "x-page": 3,
+      "x-fill": "infer"
+    },
+    "Y3": {
+      "title": "Is the premium payer different from the insured?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 3,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "C1": {
+      "title": "First name",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "First name"
+    },
+    "C13": {
+      "title": "Last name",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 50,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Last name"
+    },
+    "C2": {
+      "title": "Date of birth",
+      "type": "string",
+      "format": "date",
+      "x-age-range": {
+        "min": 18,
+        "max": 70
+      },
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Date of birth"
+    },
+    "C3": {
+      "title": "Sex at birth",
+      "type": "string",
+      "enum": [
+        "male",
+        "female"
+      ],
+      "x-labels": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Sex at birth"
+    },
+    "C4": {
+      "title": "Country of origin",
+      "type": "string",
+      "enum": [
+        "MY",
+        "SG",
+        "GB"
+      ],
+      "x-labels": {
+        "MY": "Malaysia",
+        "SG": "Singapore",
+        "GB": "United Kingdom"
+      },
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Country of origin"
+    },
+    "C5": {
+      "title": "Country of residence",
+      "type": "string",
+      "enum": [
+        "MY",
+        "SG",
+        "GB"
+      ],
+      "x-labels": {
+        "MY": "Malaysia",
+        "SG": "Singapore",
+        "GB": "United Kingdom"
+      },
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Country of residence"
+    },
+    "C6": {
+      "title": "National ID or passport number",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "ID or passport number"
+    },
+    "C7": {
+      "title": "Email",
+      "type": "string",
+      "format": "email",
+      "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$",
+      "maxLength": 200,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Email"
+    },
+    "C8": {
+      "title": "Mobile number",
+      "type": "string",
+      "pattern": "^\\+[1-9][0-9]{7,14}$",
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Mobile"
+    },
+    "C9": {
+      "title": "Street address",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Street address"
+    },
+    "C14": {
+      "title": "City",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "x-page": 4,
+      "x-fill": "db"
+    },
+    "C15": {
+      "title": "Postcode",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Postcode"
+    },
+    "C10": {
+      "title": "Occupation",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Occupation"
+    },
+    "C11": {
+      "title": "Marital status",
+      "type": "string",
+      "enum": [
+        "single",
+        "married",
+        "divorced",
+        "widowed"
+      ],
+      "x-labels": {
+        "single": "Single",
+        "married": "Married",
+        "divorced": "Divorced",
+        "widowed": "Widowed"
+      },
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Marital status"
+    },
+    "C12": {
+      "title": "Annual income range",
+      "type": "string",
+      "enum": [
+        "under_30k",
+        "30k_60k",
+        "60k_100k",
+        "over_100k"
+      ],
+      "x-labels": {
+        "under_30k": "< 30k",
+        "30k_60k": "30–60k",
+        "60k_100k": "60–100k",
+        "over_100k": "100k+"
+      },
+      "x-page": 4,
+      "x-fill": "db",
+      "x-checklist-label": "Income range"
+    },
+    "H1": {
+      "title": "Height (cm)",
+      "type": "number",
+      "minimum": 100,
+      "maximum": 250,
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Height"
+    },
+    "H2": {
+      "title": "Weight (kg)",
+      "type": "number",
+      "minimum": 30,
+      "maximum": 300,
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Weight"
+    },
+    "H3": {
+      "title": "How many alcoholic drinks do you have per week?",
+      "type": "string",
+      "enum": [
+        "none",
+        "1_7",
+        "8_14",
+        "15_plus"
+      ],
+      "x-labels": {
+        "none": "None",
+        "1_7": "1–7",
+        "8_14": "8–14",
+        "15_plus": "15+"
+      },
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Alcohol per week"
+    },
+    "H4": {
+      "title": "Do you take part in any hazardous activities?",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "none",
+          "scuba_diving",
+          "skydiving",
+          "motor_racing",
+          "mountaineering",
+          "other"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "x-labels": {
+        "none": "None",
+        "scuba_diving": "Scuba diving",
+        "skydiving": "Skydiving",
+        "motor_racing": "Motor racing",
+        "mountaineering": "Mountaineering",
+        "other": "Other"
+      },
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Hazardous activities",
+      "x-exclusive": [
+        "none"
+      ]
+    },
+    "H5": {
+      "title": "Has a parent or sibling been diagnosed before age 60 with heart disease, stroke, cancer or diabetes?",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "none",
+          "heart_disease",
+          "stroke",
+          "cancer",
+          "diabetes"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "x-labels": {
+        "none": "None",
+        "heart_disease": "Heart disease",
+        "stroke": "Stroke",
+        "cancer": "Cancer",
+        "diabetes": "Diabetes"
+      },
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Family history",
+      "x-exclusive": [
+        "none"
+      ]
+    },
+    "H6": {
+      "title": "Have you ever been diagnosed with heart disease, stroke, cancer or diabetes?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Serious diagnoses"
+    },
+    "H7": {
+      "title": "Do you have any allergies to medication?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H8": {
+      "title": "Are you currently taking prescription medication?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H9": {
+      "title": "Have you been hospitalised or had surgery in the last 5 years?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H10": {
+      "title": "Have you used recreational drugs in the last 5 years?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H11": {
+      "title": "Have you travelled to Africa, or to a region with a travel health advisory, in the last 12 months?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H12": {
+      "title": "Do you plan to live abroad for more than 6 months?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H13": {
+      "title": "Have you ever been convicted of a criminal offence?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "H14": {
+      "title": "Has an insurance application of yours ever been declined, postponed or rated?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "G1": {
+      "title": "Have you ever been pregnant?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "G2": {
+      "title": "Outcome of previous pregnancies",
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "live_birth",
+          "miscarriage",
+          "termination",
+          "ectopic",
+          "other"
+        ]
+      },
+      "uniqueItems": true,
+      "minItems": 1,
+      "x-labels": {
+        "live_birth": "Live birth",
+        "miscarriage": "Miscarriage",
+        "termination": "Termination",
+        "ectopic": "Ectopic",
+        "other": "Other"
+      },
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Pregnancy outcomes"
+    },
+    "G3": {
+      "title": "Details (year, complications)",
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500,
+      "x-page": 5,
+      "x-fill": "ask",
+      "x-checklist-label": "Pregnancy details"
+    },
+    "H15": {
+      "title": "Are you currently pregnant?",
+      "type": "string",
+      "enum": [
+        "Yes",
+        "No"
+      ],
+      "x-page": 5,
+      "x-fill": "default",
+      "x-simple": true
+    },
+    "D1": {
+      "title": "I confirm I have reviewed every answer with the customer and it is true and complete.",
+      "type": "boolean",
+      "x-fill": "human",
+      "x-agent-writable": false
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "N1",
+    "N2",
+    "N3",
+    "N6",
+    "P1",
+    "P3",
+    "Y1",
+    "Y2",
+    "Y3",
+    "C1",
+    "C13",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C6",
+    "C7",
+    "C8",
+    "C9",
+    "C14",
+    "C15",
+    "C10",
+    "C11",
+    "H1",
+    "H2",
+    "H3",
+    "H4",
+    "H5",
+    "H6",
+    "H7",
+    "H8",
+    "H9",
+    "H10",
+    "H11",
+    "H12",
+    "H13",
+    "H14"
+  ],
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "N3": {
+            "const": "Yes"
+          }
+        },
+        "required": [
+          "N3"
+        ]
+      },
+      "then": {
+        "required": [
+          "N4"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "N6": {
+            "const": "Yes"
+          }
+        },
+        "required": [
+          "N6"
+        ]
+      },
+      "then": {
+        "required": [
+          "N7"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "C3": {
+            "const": "female"
+          }
+        },
+        "required": [
+          "C3"
+        ]
+      },
+      "then": {
+        "required": [
+          "N8",
+          "G1",
+          "H15"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "G1": {
+            "const": "Yes"
+          }
+        },
+        "required": [
+          "G1"
+        ]
+      },
+      "then": {
+        "required": [
+          "G2",
+          "G3"
+        ]
+      }
+    }
+  ]
+}

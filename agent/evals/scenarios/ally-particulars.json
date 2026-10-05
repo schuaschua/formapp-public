@@ -1,0 +1,38 @@
+{
+  "id": "ally-particulars",
+  "description": "Ally Macbeal's name and date of birth from one sentence: the name is split and the date converted (synthetic, seed content).",
+  "input": "My customer is Ally Macbeal, born 20th November 1994.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Ally",
+          "C13": "Macbeal",
+          "C2": "1994-11-20"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "patch_draft": {
+      "applied": [
+        "C1",
+        "C13",
+        "C2"
+      ],
+      "errors": [],
+      "revision": 2
+    }
+  },
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

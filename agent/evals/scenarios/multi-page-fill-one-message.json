@@ -1,0 +1,72 @@
+{
+  "id": "multi-page-fill-one-message",
+  "description": "FR30, v2-adjusted: one message naming the customer's particulars (page 3), a product and term (page 1) and a payment frequency and method (page 2) fills fields on all three pages in the one turn (synthetic seed content).",
+  "input": "My customer is Ally Macbeal, born 20th November 1994. She wants SecureLife Term, 20 years, paying yearly by credit card.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Ally",
+          "C13": "Macbeal",
+          "C2": "1994-11-20"
+        }
+      }
+    },
+    {
+      "name": "get_products"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "P1": "LT20",
+          "P3": "20_yrs",
+          "Y1": "yearly",
+          "Y2": "credit_card"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "get_products": {
+      "products": [
+        {
+          "code": "LT20",
+          "name": "SecureLife Term",
+          "type": "life",
+          "covers_dependents": true,
+          "policy_terms": [
+            {"code": "10_yrs", "label": "10 yrs"},
+            {"code": "20_yrs", "label": "20 yrs"},
+            {"code": "30_yrs", "label": "30 yrs"}
+          ],
+          "sum_assured_min": 100000,
+          "sum_assured_max": 500000,
+          "default_sum_assured": 200000,
+          "default_term": "20_yrs",
+          "min_age": 18,
+          "max_age": 60,
+          "monthly": 69.46,
+          "yearly": 791.82,
+          "riders": []
+        }
+      ]
+    },
+    "patch_draft": {
+      "applied": ["C1", "C13", "C2", "P1", "P3", "Y1", "Y2"],
+      "errors": [],
+      "revision": 3
+    }
+  },
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

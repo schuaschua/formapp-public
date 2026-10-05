@@ -1,0 +1,14 @@
+// Story 7.4 (FORM-240): DAX measures for the "feedback" table. Add each one in the Power BI
+// service's model view (New measure), with the name before the "=".
+
+Feedback count = COUNTROWS ( feedback )
+
+Average rating = AVERAGE ( feedback[rating] )
+
+Comments = CALCULATE ( [Feedback count], feedback[category] <> "No comment" )
+
+Low ratings (1-2) = CALCULATE ( [Feedback count], feedback[rating] <= 2 )
+
+Low rating share = DIVIDE ( [Low ratings (1-2)], [Feedback count] )
+
+Praise share = DIVIDE ( CALCULATE ( [Feedback count], feedback[category] = "Praise" ), [Comments] )

@@ -1,0 +1,42 @@
+[
+  {
+    "comment": "The quote it gave was way off for a 35 year old non-smoker.",
+    "rating": 2,
+    "expected_category": "Accuracy"
+  },
+  {
+    "comment": "I couldn't tell why it asked for the client's income a second time.",
+    "rating": 3,
+    "expected_category": "Understanding"
+  },
+  {
+    "comment": "It kept suggesting a term plan when the client wanted whole life cover.",
+    "rating": 2,
+    "expected_category": "Product choice"
+  },
+  {
+    "comment": "Took far too long to get through the health questions with the client waiting.",
+    "rating": 3,
+    "expected_category": "Speed"
+  },
+  {
+    "comment": "The voice input kept mishearing the client's name every time I tried it.",
+    "rating": 2,
+    "expected_category": "Voice"
+  },
+  {
+    "comment": "Very easy to move between pages and go back to fix an earlier answer.",
+    "rating": 5,
+    "expected_category": "Ease of use"
+  },
+  {
+    "comment": "This saved me so much time compared to the paper form, brilliant tool.",
+    "rating": 5,
+    "expected_category": "Praise"
+  },
+  {
+    "comment": "The branch office aircon was broken again today.",
+    "rating": 3,
+    "expected_category": "Other"
+  }
+]

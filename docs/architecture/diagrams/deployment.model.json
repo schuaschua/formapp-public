@@ -1,0 +1,364 @@
+{
+  "type": "deployment",
+  "title": "formapp: Azure deployment (demo environment)",
+  "spine": "_bmad-output/planning-artifacts/architecture/architecture-formapp-2026-09-25/ARCHITECTURE-SPINE.md",
+  "sources": [],
+  "provider": "azure",
+  "direction": "LR",
+  "page": {
+    "size": "A2",
+    "orientation": "landscape"
+  },
+  "groups": [
+    {
+      "id": "sub",
+      "label": "Existing Azure subscription",
+      "kind": "subscription",
+      "icon": "general/Subscriptions",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "region",
+      "label": "Southeast Asia (Singapore)",
+      "kind": "region",
+      "parent": "sub",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "rg",
+      "label": "Resource group (demo)",
+      "kind": "resource_group",
+      "parent": "region",
+      "icon": "general/Resource_Groups",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "cae",
+      "label": "Container Apps environment",
+      "kind": "boundary",
+      "parent": "rg",
+      "icon": "other/Container_App_Environments",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "foundry",
+      "label": "Foundry account + project",
+      "kind": "boundary",
+      "parent": "rg",
+      "icon": "ai_machine_learning/AI_Studio",
+      "cite": [
+        "AD-11"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "user",
+      "label": "Insurance agent (browser)",
+      "kind": "person",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Structural Seed"
+      ]
+    },
+    {
+      "id": "entra",
+      "label": "Microsoft Entra ID",
+      "kind": "external",
+      "icon": "other/Entra_Identity",
+      "cite": [
+        "AD-10"
+      ]
+    },
+    {
+      "id": "aca",
+      "label": "Container App: api + web",
+      "kind": "service",
+      "group": "cae",
+      "icon": "other/Worker_Container_App",
+      "tech": "FastAPI + React",
+      "description": "REST, MCP, chat; min 1 replica",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "pg",
+      "label": "PostgreSQL 18",
+      "kind": "service",
+      "group": "rg",
+      "icon": "databases/Azure_Database_PostgreSQL_Server",
+      "description": "Burstable",
+      "cite": [
+        "AD-10"
+      ]
+    },
+    {
+      "id": "acr",
+      "label": "Container Registry",
+      "kind": "service",
+      "group": "rg",
+      "icon": "containers/Container_Registries",
+      "description": "api + agent images",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "st",
+      "label": "Storage account",
+      "kind": "service",
+      "group": "rg",
+      "icon": "storage/Storage_Accounts",
+      "description": "sign-in token store",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "ai",
+      "label": "App Insights + Log Analytics",
+      "kind": "service",
+      "group": "rg",
+      "icon": "devops/Application_Insights",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "budget",
+      "label": "Budget alert",
+      "kind": "service",
+      "group": "rg",
+      "icon": "general/Cost_Management",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "agent",
+      "label": "Hosted agent (agent/)",
+      "kind": "service",
+      "group": "foundry",
+      "tech": "Agent Framework",
+      "cite": [
+        "AD-1"
+      ]
+    },
+    {
+      "id": "model",
+      "label": "Model deployments",
+      "kind": "service",
+      "group": "foundry",
+      "icon": "ai_machine_learning/Azure_OpenAI",
+      "tech": "gpt-5.4-mini (active), gpt-4.1-mini (rollback)",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "speech",
+      "label": "Azure AI Speech",
+      "kind": "service",
+      "group": "rg",
+      "icon": "ai_machine_learning/Speech_Services",
+      "description": "S0, local auth off",
+      "cite": [
+        "AD-19"
+      ]
+    },
+    {
+      "id": "job",
+      "label": "Container Apps Job: feedback",
+      "kind": "service",
+      "group": "cae",
+      "icon": "other/Worker_Container_App",
+      "tech": "api image",
+      "description": "nightly, about 02:00 MYT",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "id": "stfb",
+      "label": "Storage account (feedback)",
+      "kind": "service",
+      "group": "rg",
+      "icon": "storage/Storage_Accounts",
+      "description": "feedback-export CSV",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "id": "powerbi",
+      "label": "Power BI",
+      "kind": "external",
+      "icon": "power_platform/PowerBI",
+      "cite": [
+        "AD-20"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "user",
+      "to": "aca",
+      "label": "HTTPS",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Structural Seed"
+      ]
+    },
+    {
+      "from": "user",
+      "to": "entra",
+      "label": "sign-in",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Structural Seed"
+      ]
+    },
+    {
+      "from": "aca",
+      "to": "pg",
+      "label": "Entra auth",
+      "cite": [
+        "AD-10"
+      ]
+    },
+    {
+      "from": "aca",
+      "to": "agent",
+      "label": "Responses",
+      "cite": [
+        "AD-5"
+      ]
+    },
+    {
+      "from": "agent",
+      "to": "aca",
+      "label": "MCP + turn token",
+      "cite": [
+        "AD-1"
+      ]
+    },
+    {
+      "from": "agent",
+      "to": "model",
+      "label": "model calls",
+      "cite": [
+        "AD-1"
+      ]
+    },
+    {
+      "from": "acr",
+      "to": "aca",
+      "label": "image",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "from": "acr",
+      "to": "agent",
+      "label": "image",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "from": "aca",
+      "to": "st",
+      "label": "sign-in sessions",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "from": "aca",
+      "to": "ai",
+      "label": "telemetry",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "from": "agent",
+      "to": "ai",
+      "label": "telemetry",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "from": "user",
+      "to": "speech",
+      "label": "Speech SDK, short-lived token",
+      "cite": [
+        "AD-19"
+      ]
+    },
+    {
+      "from": "aca",
+      "to": "speech",
+      "label": "Speech User identity",
+      "cite": [
+        "AD-19"
+      ]
+    },
+    {
+      "from": "job",
+      "to": "pg",
+      "label": "Entra auth",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "job",
+      "to": "model",
+      "label": "categorise",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "job",
+      "to": "stfb",
+      "label": "CSV snapshot",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "powerbi",
+      "to": "stfb",
+      "label": "reads (Entra group)",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "acr",
+      "to": "job",
+      "label": "image",
+      "cite": [
+        "AD-20"
+      ]
+    }
+  ],
+  "gaps": [
+    "Networking: no VNet, subnets or private endpoints are stated; every service is public (private networking is Deferred in the spine). Which services must move behind private endpoints before real data?",
+    "Secrets: the spine keeps secrets in Container Apps secrets, but Key Vault is Deferred; where will secrets live beyond the POC?",
+    "Environments: only one 'demo' environment; dev/test/prod separation isn't stated.",
+    "Failover region and backups beyond the PostgreSQL Flexible Server defaults are not stated (Deferred).",
+    "No official Azure icon for Microsoft Foundry: the Foundry group uses the AI Studio (former name) stencil, and the hosted agent is a plain box.",
+    "AD-20 places the feedback job in the foundation stack but does not name its Container Apps environment; it is drawn in the only environment the spine has. Is that the one?"
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "id": "contradiction-revise-default",
+  "description": "FR50, FR33: a later message contradicting Y1's own earlier ai-sourced answer changes it -- 'get_draft' shows Y1 = yearly with source ai, and the insurance agent now says monthly (synthetic seed content).",
+  "input": "Actually, she pays monthly, not yearly.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "Y1": "monthly"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 4,
+      "answers": {
+        "P1": "FSH",
+        "Y1": "yearly",
+        "Y2": "credit_card"
+      },
+      "provenance": {
+        "P1": {"source": "ai", "updated_at": "2026-09-27T09:00:00Z"},
+        "Y1": {"source": "ai", "updated_at": "2026-09-27T09:00:00Z"},
+        "Y2": {"source": "ai", "updated_at": "2026-09-27T09:00:00Z"}
+      }
+    },
+    "patch_draft": {
+      "applied": ["Y1"],
+      "errors": [],
+      "revision": 5
+    }
+  },
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

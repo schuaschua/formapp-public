@@ -1,0 +1,48 @@
+{
+  "id": "find-customer-ambiguous",
+  "description": "FORM-218: a name-only search (the seeded 'Tan Wei Ming'/'Tan Wei Min') returns more than one match; the agent asks for the last name or day rather than guessing or linking either one (synthetic seed content).",
+  "input": "My customer's first name is Tan. I don't have his last name or date of birth yet.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "Tan"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "find_customer": [
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000002",
+        "first_name": "Tan",
+        "last_name": "Wei Ming",
+        "date_of_birth": "1988-03-14",
+        "city": "George Town",
+        "customer_number": "CUS-10012"
+      },
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000003",
+        "first_name": "Tan",
+        "last_name": "Wei Min",
+        "date_of_birth": "1990-07-22",
+        "city": "Kota Kinabalu",
+        "customer_number": "CUS-10025"
+      }
+    ]
+  },
+  "forbidden_calls": [
+    {
+      "name": "link_customer"
+    }
+  ],
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

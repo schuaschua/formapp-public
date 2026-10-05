@@ -1,0 +1,63 @@
+/* Pill buttons: 40px (52px in modals), 700 weight; primary forest gradient with the forest lift,
+   secondary forest outline, cancel grey-mid outline; disabled 42% opacity, no shadow (UX-DR4). */
+.pill-button-group {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-2) var(--spacing-3);
+}
+
+.pill-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  min-height: var(--button-primary-height);
+  padding: 0 var(--button-padding-inline);
+  border: var(--button-border-width) solid transparent;
+  border-radius: var(--rounded-full);
+  font: var(--font-button);
+  cursor: pointer;
+}
+
+.pill-button--modal {
+  min-height: var(--spacing-modal-button-height);
+  padding: 0 var(--button-modal-padding-inline);
+}
+
+.pill-button--primary {
+  background: var(--button-primary-background);
+  color: var(--button-primary-foreground);
+  box-shadow: var(--forest-lift-shadow);
+}
+
+.pill-button--secondary {
+  background: var(--button-secondary-background);
+  border: var(--button-secondary-border);
+  color: var(--button-secondary-foreground);
+}
+
+.pill-button--cancel {
+  background: transparent;
+  border: var(--button-cancel-border);
+  color: var(--button-cancel-foreground);
+}
+
+/* Destructive (DESIGN.md Buttons): only "Delete draft" and its confirm (FORM-227). */
+.pill-button--destructive {
+  background: var(--button-destructive-background);
+  border: var(--button-destructive-border);
+  color: var(--button-destructive-foreground);
+}
+
+.pill-button[aria-disabled="true"] {
+  opacity: var(--button-disabled-opacity);
+  box-shadow: var(--button-disabled-shadow);
+  cursor: not-allowed;
+}
+
+/* The reason a button is disabled always shows next to it (EXPERIENCE.md accessibility floor). */
+.pill-button-reason {
+  font: var(--font-caption);
+  color: var(--color-ink-secondary);
+}

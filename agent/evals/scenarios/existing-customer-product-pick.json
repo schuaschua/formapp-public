@@ -1,0 +1,105 @@
+{
+  "id": "existing-customer-product-pick",
+  "description": "FORM-28/Owner changes: the 2026-09-27 canonical demo line -- 'existing customer ally 1994 november. she wants a cheap life and health product. her budget is 200 a month' -- also fills the product page from the same message: ELH is the cheapest life_health product at or under RM200/month (ELH monthly 100.00 beats FSH's 160.00, both baseline-priced since no date of birth is linked yet), with its own default_term, Y1 = monthly (from 'a month') and Y2 defaulting to credit card (synthetic seed content).",
+  "input": "existing customer ally 1994 november. she wants a cheap life and health product. her budget is 200 a month",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "get_products"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "P1": "ELH",
+          "P3": "10_yrs",
+          "Y1": "monthly",
+          "Y2": "credit_card"
+        }
+      }
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "ally",
+        "date_of_birth": "1994-11"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "get_products": {
+      "products": [
+        {
+          "code": "FSH",
+          "name": "FamilyShield Life & Health",
+          "type": "life_health",
+          "covers_dependents": true,
+          "policy_terms": [
+            {"code": "20_yrs", "label": "20 yrs"},
+            {"code": "30_yrs", "label": "30 yrs"}
+          ],
+          "sum_assured_min": 200000,
+          "sum_assured_max": 600000,
+          "default_sum_assured": 300000,
+          "default_term": "20_yrs",
+          "min_age": 18,
+          "max_age": 55,
+          "monthly": 160.00,
+          "yearly": 1824.00,
+          "riders": []
+        },
+        {
+          "code": "ELH",
+          "name": "Essentials Life & Health",
+          "type": "life_health",
+          "covers_dependents": false,
+          "policy_terms": [
+            {"code": "10_yrs", "label": "10 yrs"},
+            {"code": "20_yrs", "label": "20 yrs"}
+          ],
+          "sum_assured_min": 100000,
+          "sum_assured_max": 300000,
+          "default_sum_assured": 150000,
+          "default_term": "10_yrs",
+          "min_age": 18,
+          "max_age": 60,
+          "monthly": 100.00,
+          "yearly": 1140.00,
+          "riders": []
+        }
+      ]
+    },
+    "patch_draft": {
+      "applied": ["P1", "P3", "Y1", "Y2"],
+      "errors": [],
+      "revision": 2
+    },
+    "find_customer": [
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000001",
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20",
+        "city": "Petaling Jaya",
+        "customer_number": "CUS-10023"
+      }
+    ]
+  },
+  "forbidden_calls": [
+    {
+      "name": "link_customer"
+    }
+  ],
+  "forbidden_answer_keys": [
+    "D1",
+    "C1",
+    "C13",
+    "C2"
+  ]
+}

@@ -1,0 +1,45 @@
+/* Info note: pill in the form header explaining why it's read-only (DESIGN.md Components "Info
+   note", `{components.info-note}`): steel tint fill, steel-blue-dark bold text, three fading dots
+   while something is in progress. */
+.info-note {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--info-note-radius);
+  background: var(--info-note-background);
+  color: var(--info-note-foreground);
+  font: var(--font-caption);
+}
+
+.info-note__dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.info-note__dots span {
+  width: 5px;
+  height: 5px;
+  border-radius: var(--rounded-full);
+  background: currentcolor;
+  animation: info-note-dot-fade 1.2s ease-in-out infinite;
+}
+
+.info-note__dots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.info-note__dots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes info-note-dot-fade {
+  0%,
+  80%,
+  100% {
+    opacity: 0.25;
+  }
+  40% {
+    opacity: 1;
+  }
+}

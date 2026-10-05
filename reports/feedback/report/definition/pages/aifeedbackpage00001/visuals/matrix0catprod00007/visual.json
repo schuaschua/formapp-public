@@ -1,0 +1,96 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.0.0/schema.json",
+  "name": "matrix0catprod00007",
+  "position": {
+    "x": 200,
+    "y": 390,
+    "z": 7000,
+    "width": 530,
+    "height": 320,
+    "tabOrder": 7000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "feedback"
+                    }
+                  },
+                  "Property": "category"
+                }
+              },
+              "queryRef": "feedback.category",
+              "nativeQueryRef": "category"
+            }
+          ]
+        },
+        "Columns": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "feedback"
+                    }
+                  },
+                  "Property": "product_code"
+                }
+              },
+              "queryRef": "feedback.product_code",
+              "nativeQueryRef": "product_code"
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "feedback"
+                    }
+                  },
+                  "Property": "Average rating"
+                }
+              },
+              "queryRef": "feedback.Average rating",
+              "nativeQueryRef": "Average rating"
+            }
+          ]
+        }
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Average rating by category and product'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

@@ -1,0 +1,4 @@
+[workflow]
+persistent_facts = [
+  "file:docs/standards/*.md",
+]

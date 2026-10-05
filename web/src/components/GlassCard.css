@@ -1,0 +1,12 @@
+/* Flat card (Theme E "Forest"): flat white fill, no border, one soft shadow -- no glass, no blur
+   (DESIGN.md Elevation & Depth). */
+.glass-card {
+  background: var(--flat-card-background);
+  border: var(--flat-card-border);
+  border-radius: var(--flat-card-radius);
+  box-shadow: var(--flat-card-shadow);
+}
+
+.glass-card--menu {
+  background: var(--page-menu-background);
+}

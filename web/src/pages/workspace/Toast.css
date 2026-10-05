@@ -1,0 +1,33 @@
+/* The success toast (Story 3.3, DESIGN.md Components "Toast (success)"): centred near the bottom
+   of the list screen. */
+
+.toast-success {
+  position: fixed;
+  left: 50%;
+  bottom: var(--spacing-6);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  background: var(--toast-success-background);
+  border: var(--toast-success-border);
+  border-radius: var(--toast-success-radius);
+  box-shadow: var(--toast-shadow);
+  font: var(--font-toast);
+  color: var(--color-ink-heading);
+  padding: var(--spacing-3) var(--spacing-5);
+  z-index: 50;
+}
+
+.toast-success__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--rounded-full);
+  background: var(--toast-success-icon);
+  color: var(--color-white);
+  font-size: 18px;
+  flex-shrink: 0;
+}

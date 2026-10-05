@@ -1,0 +1,156 @@
+/* App shell: solid forest header bar and main area over the flat canvas (DESIGN.md Layout & Spacing).
+   Full browser width (owner request, 2026-09-27): no max width, only the screen padding. */
+.app-shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-card-gap);
+  /* FORM-225: `min-height: 100vh` is only a floor -- it never stopped this box (and so the
+     document itself) from growing taller than the viewport when a page's content needed more
+     room, which is exactly what used to happen on the workspace (DESIGN.md "Proposal workspace",
+     laptop sizes only: "the workspace fills the viewport and the page itself never scrolls").
+     `height: 100vh` fixes this box at the viewport's height instead, and `overflow-y: auto` gives
+     it its own scrollbar for any page whose content still doesn't fit (Drafts/Submitted with many
+     rows) -- the document itself now never scrolls, on any page. The workspace's own panels
+     (`.workspace__form`, `.chat-panel__messages`) already scroll internally on their own, so this
+     outer scrollbar never engages for that route. Reverted below 900px (the zoom proxy): see that
+     media query. */
+  height: 100vh;
+  overflow-y: auto;
+  padding: var(--spacing-screen-padding);
+}
+
+/* The zoom proxy (matching WelcomePage.css's/PageMenu.css's own convention, spec assumption "200%
+   zoom breakpoint"): FORM-225's fixed-viewport, non-scrolling shell is a laptop-only layout
+   (DESIGN.md Layout & Spacing: "Laptop only, designed at 1280×800"). Below this width, revert to
+   the shell's original, unbounded height so a page that no longer fits (the stacked answer rows,
+   the collapsed page-menu rail, ...) simply grows and lets the document scroll, exactly as before
+   FORM-225, rather than clipping content inside a box that no longer has room for it. */
+@media (max-width: 900px) {
+  .app-shell {
+    height: auto;
+    min-height: 100vh;
+    overflow-y: visible;
+  }
+}
+
+.app-header {
+  /* Above the main area, so the avatar menu that drops out of it isn't painted under a page card. */
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3) var(--spacing-4);
+  min-height: var(--app-header-height);
+  padding: var(--spacing-2) var(--spacing-4) var(--spacing-2) var(--spacing-3);
+  border-radius: var(--app-header-radius);
+  color: var(--app-header-foreground);
+}
+
+.app-header__slot {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-3);
+  min-width: 0;
+}
+
+.app-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-height: var(--target-min-size);
+  padding-right: var(--spacing-2);
+  border-radius: var(--rounded-md);
+  font-weight: 800;
+  font-size: var(--logo-font-size);
+  color: var(--app-header-foreground);
+  text-decoration: none;
+}
+
+.app-logo__tile {
+  display: grid;
+  place-items: center;
+  width: var(--logo-tile-size);
+  height: var(--logo-tile-size);
+  border-radius: var(--logo-tile-radius);
+  background: var(--logo-tile-background);
+  color: var(--color-white);
+  font: var(--font-button);
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-card-gap);
+  min-width: 0;
+  /* FORM-225: without this, a flex column item defaults to a min-height equal to its content's
+     natural size, so a tall page (the workspace's form/chat, whose own panels scroll internally)
+     forced `.app-shell` taller than 100vh and the whole document scrolled instead. `min-height: 0`
+     lets `.app-main` -- and everything below it that also sets `min-height: 0` -- shrink to the
+     viewport's actual remaining space, so only each page's own internal scroll container scrolls. */
+  min-height: 0;
+}
+
+/* The workspace's "Drafts / <name>" breadcrumb, set from the fetched draft once it opens (Story
+   1.8, extended to every path -- not only New proposal -- by Story 1.9). */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--app-header-muted);
+  font: var(--font-menu-item);
+}
+
+.breadcrumb__link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min-size);
+  color: inherit;
+  text-decoration: none;
+}
+
+.breadcrumb__link:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb__current {
+  color: var(--app-header-foreground);
+  font-weight: 650;
+}
+
+/* Hidden until focused, then shown top left above the header (first Tab stop on every page). */
+.skip-link {
+  position: absolute;
+  top: var(--spacing-2);
+  left: var(--spacing-screen-padding);
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--target-min-size);
+  padding: 0 var(--spacing-4);
+  border-radius: var(--rounded-full);
+  background: var(--color-card);
+  color: var(--color-ink-heading);
+  font: var(--font-button);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.skip-link:focus {
+  clip-path: none;
+}
+
+.app-main:focus {
+  outline: none;
+}
+
+.app-main:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}

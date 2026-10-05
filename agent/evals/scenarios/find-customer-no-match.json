@@ -1,0 +1,47 @@
+{
+  "id": "find-customer-no-match",
+  "description": "Story 5.1: the agent still searches once it has a different customer's full particulars, even when the search turns up no match (synthetic data).",
+  "input": "My customer is Ravi Kumar, born 12 May 1990.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Ravi",
+          "C13": "Kumar",
+          "C2": "1990-05-12"
+        }
+      }
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "Ravi",
+        "last_name": "Kumar",
+        "date_of_birth": "1990-05-12"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "patch_draft": {
+      "applied": [
+        "C1",
+        "C13",
+        "C2"
+      ],
+      "errors": [],
+      "revision": 2
+    },
+    "find_customer": []
+  },
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

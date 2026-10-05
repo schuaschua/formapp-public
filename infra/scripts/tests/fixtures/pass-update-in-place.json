@@ -1,0 +1,4 @@
+{"format_version":"1.2","resource_changes":[
+  {"address":"module.postgresql_flexible_server.azurerm_postgresql_flexible_server.this","type":"azurerm_postgresql_flexible_server","change":{"actions":["update"],"before":{},"after":{}}},
+  {"address":"module.container_apps_environment.azurerm_container_app_environment.this","type":"azurerm_container_app_environment","change":{"actions":["update"],"before":{},"after":{}}}
+]}

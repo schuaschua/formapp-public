@@ -1,0 +1,210 @@
+<mxfile host="org-kit agent-davinci" type="device">
+  <diagram id="c4-containers" name="C4 containers">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" math="0" shadow="0" pageWidth="2339" pageHeight="1654">
+      <root>
+        <object id="0" label="" arch_diagram="1" arch_type="c4-containers" arch_title="formapp: containers and tech stack" drawn="2026-10-04T13:59:19+00:00" spine="_bmad-output/planning-artifacts/architecture/architecture-formapp-2026-09-25/ARCHITECTURE-SPINE.md" spine_commit="d9598d2fc6322f0c648c613eb507943d426c2a73" spine_committed="2026-09-28T16:47:38+08:00" spine_dirty="false" spine_modified="2026-09-28T09:18:46+00:00" ad_hashes="{&quot;AD-1&quot;:&quot;a70efe21becd&quot;,&quot;AD-2&quot;:&quot;8b5ae41b8a69&quot;,&quot;AD-3&quot;:&quot;cfb6bd015f56&quot;,&quot;AD-4&quot;:&quot;f3074b431cc3&quot;,&quot;AD-5&quot;:&quot;b0eb09ee8101&quot;,&quot;AD-6&quot;:&quot;f329f1d06066&quot;,&quot;AD-7&quot;:&quot;4f3c95809b1a&quot;,&quot;AD-8&quot;:&quot;324c2171a06e&quot;,&quot;AD-9&quot;:&quot;8143be246f58&quot;,&quot;AD-10&quot;:&quot;94e15571110b&quot;,&quot;AD-11&quot;:&quot;f3389c9e17d2&quot;,&quot;AD-12&quot;:&quot;ccb6d8bb00b9&quot;,&quot;AD-13&quot;:&quot;508cd2740519&quot;,&quot;AD-14&quot;:&quot;b1f2fe1742c5&quot;,&quot;AD-15&quot;:&quot;df816d471051&quot;,&quot;AD-16&quot;:&quot;9774ce0e945d&quot;,&quot;AD-17&quot;:&quot;f4feaa561805&quot;,&quot;AD-18&quot;:&quot;aecd72085946&quot;,&quot;AD-19&quot;:&quot;90628054de95&quot;,&quot;AD-20&quot;:&quot;cee3d48627e9&quot;}" cited_ads="AD-1,AD-2,AD-3,AD-4,AD-5,AD-7,AD-8,AD-10,AD-11,AD-17,AD-18,AD-19,AD-20" source_hashes="{&quot;_bmad-output/specs/spec-agent-first-insurance-form/SPEC.md&quot;:&quot;ad3db9e5de6b&quot;}" page="A2 landscape x1 at 1.00">
+          <mxCell />
+        </object>
+        <mxCell id="1" parent="0" />
+        <object id="g-sys" label="formapp (Azure Container Apps, Southeast Asia) &lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;(AD-11)&lt;/font&gt;" cite="AD-11" tooltip="Source: AD-11">
+          <mxCell style="rounded=0;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;align=left;verticalAlign=top;spacingLeft=8;spacingTop=2;fillColor=none;fontStyle=1;fontSize=12;dashed=1;strokeColor=#444444;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="313.0" y="106.8" width="734.0" height="759.5" />
+          </mxCell>
+        </object>
+        <object id="n-agentuser" label="&lt;b&gt;Insurance agent&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-8&lt;/font&gt;" cite="AD-8" tooltip="Source: AD-8">
+          <mxCell style="shape=actor;html=1;fillColor=#08427B;strokeColor=#073B6F;verticalLabelPosition=bottom;verticalAlign=top;fontSize=12;verticalLabelPosition=bottom;verticalAlign=top;whiteSpace=wrap;html=1;labelWidth=120;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="88.0" y="174.0" width="44.0" height="52.0" />
+          </mxCell>
+        </object>
+        <object id="n-entra" label="&lt;b&gt;Microsoft Entra ID&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-18&lt;/font&gt;" cite="AD-18" tooltip="Source: AD-18">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="25.0" y="390.0" width="170.0" height="80.0" />
+          </mxCell>
+        </object>
+        <object id="n-web" label="&lt;b&gt;web&lt;/b&gt;&lt;br&gt;&lt;i&gt;[React, Vite, TypeScript]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-5&lt;/font&gt;" cite="AD-5" tooltip="Source: AD-5">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="22.0" y="52.0" width="170.0" height="82.5" />
+          </mxCell>
+        </object>
+        <object id="n-api" label="&lt;b&gt;api&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Python 3.13, FastAPI]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-2; AD-10&lt;/font&gt;" cite="AD-2; AD-10" tooltip="Source: AD-2; AD-10">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="282.0" y="233.2" width="170.0" height="80.0" />
+          </mxCell>
+        </object>
+        <object id="n-agent" label="&lt;b&gt;agent&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Foundry hosted agent]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-1&lt;/font&gt;" cite="AD-1" tooltip="Source: AD-1">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="282.0" y="603.2" width="170.0" height="80.0" />
+          </mxCell>
+        </object>
+        <object id="n-model" label="&lt;b&gt;Model deployment&lt;/b&gt;&lt;br&gt;&lt;i&gt;[gpt-5.4-mini (active), gpt-4.1-mini (rollback)]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-18&lt;/font&gt;" cite="AD-18" tooltip="Source: AD-18">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="1295.0" y="561.0" width="170.0" height="98.1" />
+          </mxCell>
+        </object>
+        <object id="n-pg" label="&lt;b&gt;PostgreSQL&lt;/b&gt;&lt;br&gt;&lt;i&gt;[PostgreSQL 18]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-10; AD-17&lt;/font&gt;" cite="AD-10; AD-17" tooltip="Source: AD-10; AD-17">
+          <mxCell style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="22.0" y="462.8" width="170.0" height="80.9" />
+          </mxCell>
+        </object>
+        <object id="n-schema" label="&lt;b&gt;form-schema&lt;/b&gt;&lt;br&gt;&lt;i&gt;[JSON Schema]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-7&lt;/font&gt;" cite="AD-7" tooltip="Source: AD-7">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="542.0" y="53.2" width="170.0" height="80.0" />
+          </mxCell>
+        </object>
+        <object id="n-tokens" label="&lt;b&gt;Sign-in token store&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Azure Storage]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-11&lt;/font&gt;" cite="AD-11" tooltip="Source: AD-11">
+          <mxCell style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="282.0" y="52.8" width="170.0" height="80.9" />
+          </mxCell>
+        </object>
+        <object id="n-appi" label="&lt;b&gt;App Insights&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-11&lt;/font&gt;" cite="AD-11" tooltip="Source: AD-11">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="1295.0" y="160.0" width="170.0" height="80.0" />
+          </mxCell>
+        </object>
+        <object id="n-speech" label="&lt;b&gt;Azure AI Speech&lt;/b&gt;&lt;br&gt;&lt;i&gt;[speech to text, en-SG]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-19&lt;/font&gt;" cite="AD-19" tooltip="Source: AD-19">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="25.0" y="658.8" width="170.0" height="82.5" />
+          </mxCell>
+        </object>
+        <object id="n-job" label="&lt;b&gt;feedback job&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container Apps Job, nightly, api image]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="542.0" y="462.0" width="170.0" height="82.5" />
+          </mxCell>
+        </object>
+        <object id="n-fbstore" label="&lt;b&gt;Feedback export&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Azure Storage, one CSV]&lt;/i&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fontSize=12;fillColor=#438DD5;strokeColor=#3C7FC0;fontColor=#FFFFFF;" parent="g-sys" vertex="1">
+            <mxGeometry as="geometry" x="542.0" y="645.0" width="170.0" height="96.5" />
+          </mxCell>
+        </object>
+        <object id="n-powerbi" label="&lt;b&gt;Power BI&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#555555&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="rounded=1;whiteSpace=wrap;html=1;arcSize=8;fontSize=12;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="1295.0" y="760.0" width="170.0" height="80.0" />
+          </mxCell>
+        </object>
+        <object id="e-1" label="uses&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#0891B2&quot;&gt;ARCHITECTURE-SPINE.md Structural&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#0891B2&quot;&gt;Seed&lt;/font&gt;" cite="ARCHITECTURE-SPINE.md Structural Seed" tooltip="Source: ARCHITECTURE-SPINE.md Structural Seed">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#0891B2;fontColor=#0891B2;strokeWidth=1.5;exitX=1;exitY=0.5;exitPerimeter=0;" parent="1" edge="1" source="n-agentuser" target="n-web">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-2" label="signs in&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#111827&quot;&gt;ARCHITECTURE-SPINE.md Structural&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#111827&quot;&gt;Seed&lt;/font&gt;" cite="ARCHITECTURE-SPINE.md Structural Seed" tooltip="Source: ARCHITECTURE-SPINE.md Structural Seed">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#111827;fontColor=#111827;strokeWidth=1.5;exitX=0.5;exitY=1;exitDx=0;exitDy=36;exitPerimeter=0;" parent="1" edge="1" source="n-agentuser" target="n-entra">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-3" label="REST + SSE, speech token&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#0B6FBF&quot;&gt;AD-5; AD-19&lt;/font&gt;" cite="AD-5; AD-19" tooltip="Source: AD-5; AD-19">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#0B6FBF;fontColor=#0B6FBF;strokeWidth=1.5;" parent="1" edge="1" source="n-web" target="n-api">
+            <mxGeometry as="geometry" relative="1" x="-0.35">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-4" label="chat turns (Responses)&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#7B3FBF&quot;&gt;AD-5; AD-4&lt;/font&gt;" cite="AD-5; AD-4" tooltip="Source: AD-5; AD-4">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#7B3FBF;fontColor=#7B3FBF;strokeWidth=1.5;" parent="1" edge="1" source="n-api" target="n-agent">
+            <mxGeometry as="geometry" relative="1" x="-0.45">
+              <Array as="points">
+                <mxPoint x="656.0" y="565.0" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-5" label="MCP tools&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#0B6FBF&quot;&gt;AD-1; AD-3; AD-4&lt;/font&gt;" cite="AD-1; AD-3; AD-4" tooltip="Source: AD-1; AD-3; AD-4">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#0B6FBF;fontColor=#0B6FBF;strokeWidth=1.5;" parent="1" edge="1" source="n-agent" target="n-api">
+            <mxGeometry as="geometry" relative="1" x="-0.45">
+              <Array as="points">
+                <mxPoint x="704.0" y="565.0" />
+              </Array>
+            </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-6" label="model calls&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#C2410C&quot;&gt;AD-1&lt;/font&gt;" cite="AD-1" tooltip="Source: AD-1">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#C2410C;fontColor=#C2410C;strokeWidth=1.5;" parent="1" edge="1" source="n-agent" target="n-model">
+            <mxGeometry as="geometry" relative="1" x="0.6">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-7" label="reads/writes&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#15803D&quot;&gt;AD-10&lt;/font&gt;" cite="AD-10" tooltip="Source: AD-10">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#15803D;fontColor=#15803D;strokeWidth=1.5;" parent="1" edge="1" source="n-api" target="n-pg">
+            <mxGeometry as="geometry" relative="1" x="-0.3">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-8" label="loads&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#4D7C0F&quot;&gt;AD-7&lt;/font&gt;" cite="AD-7" tooltip="Source: AD-7">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#4D7C0F;fontColor=#4D7C0F;strokeWidth=1.5;" parent="1" edge="1" source="n-api" target="n-schema">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-9" label="sign-in sessions&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#0F766E&quot;&gt;ARCHITECTURE-SPINE.md Structural&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#0F766E&quot;&gt;Seed&lt;/font&gt;" cite="ARCHITECTURE-SPINE.md Structural Seed" tooltip="Source: ARCHITECTURE-SPINE.md Structural Seed">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#0F766E;fontColor=#0F766E;strokeWidth=1.5;" parent="1" edge="1" source="n-api" target="n-tokens">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-10" label="telemetry&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#64748B&quot;&gt;ARCHITECTURE-SPINE.md Consistency&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#64748B&quot;&gt;Conventions&lt;/font&gt;" cite="ARCHITECTURE-SPINE.md Consistency Conventions" tooltip="Source: ARCHITECTURE-SPINE.md Consistency Conventions">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#64748B;fontColor=#64748B;strokeWidth=1.5;" parent="1" edge="1" source="n-api" target="n-appi">
+            <mxGeometry as="geometry" relative="1" x="0.4">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-11" label="telemetry&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#64748B&quot;&gt;ARCHITECTURE-SPINE.md Consistency&lt;/font&gt;&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#64748B&quot;&gt;Conventions&lt;/font&gt;" cite="ARCHITECTURE-SPINE.md Consistency Conventions" tooltip="Source: ARCHITECTURE-SPINE.md Consistency Conventions">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#64748B;fontColor=#64748B;strokeWidth=1.5;" parent="1" edge="1" source="n-agent" target="n-appi">
+            <mxGeometry as="geometry" relative="1" x="0.4">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-12" label="audio to text (Speech SDK)&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#BE185D&quot;&gt;AD-19&lt;/font&gt;" cite="AD-19" tooltip="Source: AD-19">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#BE185D;fontColor=#BE185D;strokeWidth=1.5;" parent="1" edge="1" source="n-web" target="n-speech">
+            <mxGeometry as="geometry" relative="1" x="0.3">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-13" label="mints short-lived token&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#BE185D&quot;&gt;AD-19&lt;/font&gt;" cite="AD-19" tooltip="Source: AD-19">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#BE185D;fontColor=#BE185D;strokeWidth=1.5;" parent="1" edge="1" source="n-api" target="n-speech">
+            <mxGeometry as="geometry" relative="1" x="-0.2">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-14" label="reads feedback, stores&lt;br&gt;category&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#15803D&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#15803D;fontColor=#15803D;strokeWidth=1.5;" parent="1" edge="1" source="n-job" target="n-pg">
+            <mxGeometry as="geometry" relative="1" x="0.45">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-15" label="categorises comments&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#C2410C&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#C2410C;fontColor=#C2410C;strokeWidth=1.5;" parent="1" edge="1" source="n-job" target="n-model">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-16" label="overwrites snapshot&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#A16207&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#A16207;fontColor=#A16207;strokeWidth=1.5;" parent="1" edge="1" source="n-job" target="n-fbstore">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="e-17" label="reads snapshot&lt;br&gt;&lt;font style=&quot;font-size:9px&quot; color=&quot;#A16207&quot;&gt;AD-20&lt;/font&gt;" cite="AD-20" tooltip="Source: AD-20">
+          <mxCell style="html=1;endArrow=block;endFill=1;fontSize=10;labelBackgroundColor=#FFFFFF;edgeStyle=none;rounded=0;strokeColor=#A16207;fontColor=#A16207;strokeWidth=1.5;" parent="1" edge="1" source="n-powerbi" target="n-fbstore">
+            <mxGeometry as="geometry" relative="1" x="0">
+              </mxGeometry>
+          </mxCell>
+        </object>
+        <object id="title" label="&lt;b&gt;C4 containers: formapp: containers and tech stack&lt;/b&gt;">
+          <mxCell style="text;html=1;align=left;verticalAlign=top;fontSize=16;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="20" y="10" width="1465" height="28" />
+          </mxCell>
+        </object>
+        <object id="stamp" label="Drawn 2026-10-04 from _bmad-output/planning-artifacts/architecture/architecture-formapp-2026-09-25/ARCHITECTURE-SPINE.md @ d9598d2 (2026-09-28)">
+          <mxCell style="text;html=1;align=left;verticalAlign=top;fontSize=10;fontColor=#555555;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="20" y="38" width="1465" height="20" />
+          </mxCell>
+        </object>
+        <object id="notes" label="&lt;b&gt;Gaps (not drawn):&lt;/b&gt; none&lt;br&gt;&lt;br&gt;Each element's source is in grey under its name and in its tooltip.&lt;br&gt;&lt;br&gt;Arrow colour shows where the arrow goes: every arrow into the same element has that element's colour.">
+          <mxCell style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;strokeColor=#CCCCCC;fillColor=#FAFAFA;spacing=8;" parent="1" vertex="1">
+            <mxGeometry as="geometry" x="20" y="886" width="1465" height="95" />
+          </mxCell>
+        </object>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

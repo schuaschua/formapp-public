@@ -1,0 +1,71 @@
+[project]
+name = "formapp-agent"
+version = "0.1.0"
+description = "formapp agent: the Foundry hosted agent that fills proposals through the api MCP server (spine AD-1, AD-3, AD-4)."
+requires-python = "==3.13.*"
+# Exact pins (security.md rule 26); the spine Stack table fixes the framework versions.
+# azure-ai-agentserver-responses is pinned explicitly so the resolver takes the hosting package's
+# pre-release chain without allowing pre-releases everywhere (see [tool.uv] below).
+dependencies = [
+    "agent-framework-foundry==1.13.1",
+    "agent-framework-foundry-hosting==1.0.0b260918",
+    "azure-ai-agentserver-responses==2.2.0b1",
+    "azure-identity==1.25.3",
+    "azure-monitor-opentelemetry-exporter==1.0.0b57",
+    "httpx==0.28.1",
+    "mcp==1.30.0",
+    "opentelemetry-sdk==1.44.0",
+    "pydantic-settings==2.15.0",
+]
+
+[dependency-groups]
+dev = [
+    # Its pytest plugin runs the async tests (anyio is already a runtime dependency of the host).
+    "anyio==4.15.1",
+    "mypy==2.3.1",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "ruff==0.16.9",
+]
+
+# An application, not a library: uv installs only the dependencies; the code runs from this folder.
+[tool.uv]
+package = false
+# Pre-releases only where a pin names one or no stable release satisfies a dependency
+# (security.md rule 28); "allow" would drag in unrelated betas.
+prerelease = "if-necessary-or-explicit"
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+# Ruff defaults plus import order, bugbear, pyupgrade and security (coding-style.md rule 1 table).
+extend-select = ["I", "B", "UP", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+# assert is how pytest checks results.
+"tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.13"
+exclude = ["^\\.venv/"]
+
+# These two ship without a py.typed marker; their public API is typed but mypy can't read it.
+[[tool.mypy.overrides]]
+module = ["agent_framework_foundry", "agent_framework_foundry_hosting"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+
+[tool.coverage.run]
+source = ["formapp_agent", "evals"]
+branch = true
+
+[tool.coverage.report]
+# coding-style.md rule 25: never lower it; add tests instead.
+fail_under = 80
+show_missing = true
+skip_covered = true

@@ -1,0 +1,353 @@
+# Deploy demo (Story 1.2, AD-11, terraform.md rules 26-27 and 33-36).
+# Started by hand on main by the owner; starting it is the human approval of the plans it applies.
+# Order: foundation plan/guard/apply, az acr build (api, agent), migrations, agent plan/apply, smoke
+# checks (/readyz, then the forged-principal /api/me 401 check, then one Responses call to the hosted
+# agent, Story 4.1).
+# A failed step stops everything after it.
+name: Deploy demo
+
+on:
+  workflow_dispatch:
+
+permissions: {}
+
+# One deploy at a time; a running deploy is never cancelled.
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy demo
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    # Deployment branch policy: main only (the environment:demo federated credential).
+    environment:
+      name: demo
+      url: ${{ steps.foundation_outputs.outputs.app_url }}
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      # OIDC workload identity federation for Terraform (provider, backend, remote state): Terraform
+      # requests fresh GitHub tokens itself, so long applies don't outlive the az CLI login.
+      ARM_USE_OIDC: "true"
+      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      TF_IN_AUTOMATION: "true"
+      TERRAFORM_VERSION: "1.16.4"
+      FOUNDATION_DIR: infra/demo/foundation
+      AGENT_DIR: infra/demo/agent
+      # The pipeline identity's PostgreSQL principal and the AD-17 migration role (infra/bootstrap/README.md step 3).
+      DB_PRINCIPAL: id-sample-demo-sea-deploy
+      DB_NAME: formapp
+      DB_MIGRATION_ROLE: formapp_migrator
+      # [ASSUMPTION] (Story 4.3 Part B, AD-17): the api managed identity's name, so migration 0009's
+      # row-level security policies can be granted to it by name (infra/bootstrap/README.md step 3).
+      DB_API_PRINCIPAL: id-sample-demo-sea-api
+      # Passed to the agent stack with -var, so the built and deployed repositories always match.
+      IMAGE_REPOSITORY: api
+      AGENT_IMAGE_REPOSITORY: agent
+    steps:
+      # 1. Deploy only the current main HEAD, before anything signs in to Azure.
+      - name: Refuse anything but the current main HEAD
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_REF: ${{ github.ref }}
+          RUN_SHA: ${{ github.sha }}
+        run: |
+          if [[ "$RUN_REF" != "refs/heads/main" ]]; then
+            echo "::error::Deploy demo runs only on main; this run is on ${RUN_REF}. Start it again on main."
+            exit 1
+          fi
+          head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq .sha)"
+          if [[ "$head_sha" != "$RUN_SHA" ]]; then
+            echo "::error::This run is for ${RUN_SHA}, but main is now at ${head_sha}. Start a new run on main."
+            exit 1
+          fi
+          echo "Deploying main at ${RUN_SHA}."
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          # Full history: the migration step compares api/migrations with the deployed commit.
+          fetch-depth: 0
+
+      # 2. OIDC sign-in for the az CLI steps; no Azure secret is stored in GitHub (terraform.md rule 34).
+      - name: Azure login (OIDC)
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      # 3. foundation: plan, guard, summary, apply the saved plan (never -auto-approve).
+      - name: foundation plan
+        run: |
+          terraform -chdir="$FOUNDATION_DIR" init -input=false
+          terraform -chdir="$FOUNDATION_DIR" plan -input=false -out=tfplan
+
+      - name: foundation guard (no destroy or replace of the resource group, PostgreSQL, the Container Apps environment or Foundry)
+        run: |
+          plan_json="$RUNNER_TEMP/foundation-plan.json"
+          terraform -chdir="$FOUNDATION_DIR" show -json tfplan >"$plan_json"
+          rc=0
+          infra/scripts/plan-guard.sh "$plan_json" || rc=$?
+          rm -f "$plan_json"
+          exit "$rc"
+
+      - name: foundation plan summary
+        run: |
+          {
+            echo "## foundation plan"
+            echo
+            echo '````text'
+            terraform -chdir="$FOUNDATION_DIR" show -no-color tfplan | head -c 400000
+            echo '````'
+          } >>"$GITHUB_STEP_SUMMARY"
+
+      - name: foundation apply
+        run: terraform -chdir="$FOUNDATION_DIR" apply -input=false tfplan
+
+      - name: foundation outputs
+        id: foundation_outputs
+        run: |
+          out() {
+            local value
+            if ! value="$(terraform -chdir="$FOUNDATION_DIR" output -raw "$1")" || [[ -z "$value" ]]; then
+              echo "::error::foundation output $1 is missing or empty."
+              exit 1
+            fi
+            echo "$2=${value}" >>"$GITHUB_OUTPUT"
+            last_value="$value"
+          }
+          out resource_group_name resource_group
+          out container_registry_name registry
+          out container_app_name app_name
+          out container_app_fqdn app_fqdn
+          echo "app_url=https://${last_value}" >>"$GITHUB_OUTPUT"
+          out postgresql_server_name pg_server
+          out postgresql_fqdn pg_fqdn
+          out foundry_project_endpoint project_endpoint
+          out hosted_agent_name agent_name
+          out container_app_job_name feedback_job_name
+          out container_registry_login_server registry_login_server
+          rm -f "$FOUNDATION_DIR/tfplan"
+
+      # A first foundation apply can outlast the az CLI's OIDC token, so sign in again for the az steps.
+      - name: Azure login again (OIDC)
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      # 4. Build the api and agent images in ACR (no admin credentials), both tagged with the commit
+      # SHA. The agent image is Story 4.2's Dockerfile, with agent/ as its build context.
+      - name: az acr build
+        env:
+          REGISTRY: ${{ steps.foundation_outputs.outputs.registry }}
+        run: |
+          az acr build --registry "$REGISTRY" --image "${IMAGE_REPOSITORY}:${GITHUB_SHA}" \
+            --file api/Dockerfile .
+          az acr build --registry "$REGISTRY" --image "${AGENT_IMAGE_REPOSITORY}:${GITHUB_SHA}" \
+            --file agent/Dockerfile agent
+
+      # Story 7.1/FORM-237: the nightly feedback job runs the api image, but foundation ignores its
+      # own image (AD-11, the same chicken-and-egg lifecycle.ignore_changes solves for the api
+      # Container App) because it doesn't exist yet at foundation's apply time. Set it here, now
+      # that az acr build has pushed this commit's tag -- out-of-band, like the api Container App's
+      # own placeholder is later replaced by the agent stack's PATCH, just with az CLI instead of a
+      # second Terraform stack (the job has no second owner to patch it).
+      - name: Update feedback job image
+        env:
+          RESOURCE_GROUP: ${{ steps.foundation_outputs.outputs.resource_group }}
+          # The registry's login server (crsampledemosea.azurecr.io), not its name: the image
+          # reference must be fully qualified (run 36380141213 failed with the bare name).
+          REGISTRY_LOGIN_SERVER: ${{ steps.foundation_outputs.outputs.registry_login_server }}
+          JOB_NAME: ${{ steps.foundation_outputs.outputs.feedback_job_name }}
+        run: |
+          az containerapp job update --resource-group "$RESOURCE_GROUP" --name "$JOB_NAME" \
+            --image "${REGISTRY_LOGIN_SERVER}/${IMAGE_REPOSITORY}:${GITHUB_SHA}"
+
+      # 5. Migrations (terraform.md rule 36), once Story 1.3 adds Alembic. They need the database
+      # principals from the manual pgaadauth step after the first foundation apply.
+      # Migrate only when api/migrations or api/alembic.ini changed since the deployed commit (the
+      # agent stack's api_image tag, read before this run's agent apply). A first deploy, or a
+      # deployed commit that isn't in history, always migrates.
+      - name: Decide whether to migrate
+        id: migrate
+        run: |
+          if [[ ! -f api/alembic.ini ]]; then
+            echo "run=false" >>"$GITHUB_OUTPUT"
+            echo "Migrations skipped: no \`api/alembic.ini\`." >>"$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          terraform -chdir="$AGENT_DIR" init -input=false >/dev/null
+          deployed="$(terraform -chdir="$AGENT_DIR" output -raw api_image 2>/dev/null || true)"
+          deployed_sha="${deployed##*:}"
+          if [[ "$deployed_sha" =~ ^[0-9a-f]{40}$ ]] && git cat-file -e "${deployed_sha}^{commit}" 2>/dev/null \
+            && git diff --quiet "$deployed_sha" "$GITHUB_SHA" -- api/migrations api/alembic.ini; then
+            echo "run=false" >>"$GITHUB_OUTPUT"
+            echo "Migrations skipped: nothing under \`api/migrations\` changed since the deployed commit ${deployed_sha}." >>"$GITHUB_STEP_SUMMARY"
+          else
+            echo "run=true" >>"$GITHUB_OUTPUT"
+            echo "Migrations run (deployed commit: ${deployed_sha:-unknown})."
+          fi
+
+      # PostgreSQL is reachable for migrations only through the allow-all rule
+      # (postgresql_allow_public_access): development environments may have their firewall open to
+      # all addresses for a temporary period (owner policy, 2026-09-27). If
+      # postgresql_allow_public_access is ever set to false, the migration step can't connect, and
+      # the per-run firewall steps removed in FORM-7 would have to be restored.
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+        if: steps.migrate.outputs.run == 'true'
+        with:
+          python-version: "3.13"
+
+      # Signed in as the pipeline identity with an Entra token as the password (no stored password).
+      # The migrations run as DB_MIGRATION_ROLE (SET ROLE in api's Alembic env), the only role that
+      # owns the tables and sees every row through its own row-level security policy (AD-17).
+      - name: alembic upgrade head
+        if: steps.migrate.outputs.run == 'true'
+        working-directory: api
+        env:
+          PGHOST: ${{ steps.foundation_outputs.outputs.pg_fqdn }}
+          # Verify the server's certificate and host name against the runner's CA bundle before the
+          # Entra token is sent (AD-10); api/migrations/env.py leaves these libpq settings alone.
+          PGSSLMODE: verify-full
+          # The explicit Ubuntu bundle file: "system" didn't resolve for the OpenSSL bundled in the
+          # psycopg wheel ("certificate verify failed", run 36238762022).
+          PGSSLROOTCERT: /etc/ssl/certs/ca-certificates.crt
+        run: |
+          uv sync --locked --no-dev
+          PGPASSWORD="$(az account get-access-token --resource-type oss-rdbms --query accessToken -o tsv)"
+          echo "::add-mask::${PGPASSWORD}"
+          export PGPASSWORD PGUSER="$DB_PRINCIPAL" PGDATABASE="$DB_NAME"
+          uv run --no-sync alembic upgrade head
+
+      # 6. agent: set the Container App's image and agent env to this commit, and the hosted agent's
+      # version to agent:<SHA> (Story 4.1). azapi_resource_action has no drift detection, so once it is
+      # in state it is replaced on every deploy: the image is always set again, even for the same
+      # commit after a manual rollback.
+      - name: agent plan
+        run: |
+          terraform -chdir="$AGENT_DIR" init -input=false
+          replace=()
+          if terraform -chdir="$AGENT_DIR" state list 2>/dev/null | grep -qxF 'azapi_resource_action.api_image[0]'; then
+            replace=(-replace='azapi_resource_action.api_image[0]')
+          fi
+          terraform -chdir="$AGENT_DIR" plan -input=false \
+            -var "image_tag=${GITHUB_SHA}" -var "image_repository=${IMAGE_REPOSITORY}" \
+            -var "agent_image_repository=${AGENT_IMAGE_REPOSITORY}" \
+            "${replace[@]}" -out=tfplan
+          {
+            echo "## agent plan"
+            echo
+            echo '````text'
+            terraform -chdir="$AGENT_DIR" show -no-color tfplan | head -c 200000
+            echo '````'
+          } >>"$GITHUB_STEP_SUMMARY"
+
+      - name: agent apply
+        id: agent_apply
+        run: |
+          terraform -chdir="$AGENT_DIR" apply -input=false tfplan
+          rm -f "$AGENT_DIR/tfplan"
+          if ! image="$(terraform -chdir="$AGENT_DIR" output -raw api_image)" || [[ -z "$image" ]]; then
+            echo "::error::agent output api_image is missing or empty; the image was not set."
+            exit 1
+          fi
+          echo "image=${image}" >>"$GITHUB_OUTPUT"
+
+      # 7. Read-only smoke check (AD-18): the latest revision runs this image, is ready, and /readyz
+      # returns 200, within 3 attempts 10 seconds apart (owner decision, 2026-09-27: 5 minutes of
+      # retries was too long); then a forged X-MS-CLIENT-PRINCIPAL still gets 401 (Story 1.6).
+      - name: Smoke check /readyz
+        env:
+          RESOURCE_GROUP: ${{ steps.foundation_outputs.outputs.resource_group }}
+          APP_NAME: ${{ steps.foundation_outputs.outputs.app_name }}
+          APP_FQDN: ${{ steps.foundation_outputs.outputs.app_fqdn }}
+          EXPECTED_IMAGE: ${{ steps.agent_apply.outputs.image }}
+        run: |
+          for attempt in 1 2 3; do
+            ((attempt == 1)) || sleep 10
+            read -r image latest ready < <(az containerapp show --resource-group "$RESOURCE_GROUP" --name "$APP_NAME" \
+              --query "[properties.template.containers[0].image, properties.latestRevisionName, properties.latestReadyRevisionName]" \
+              -o tsv | tr '\n' ' ') || true
+            code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 "https://${APP_FQDN}/readyz" || true)"
+            echo "attempt ${attempt}: image=${image:-?} revision=${latest:-?} ready=${ready:-?} /readyz=${code}"
+            if [[ "$image" == "$EXPECTED_IMAGE" && -n "$latest" && "$latest" == "$ready" && "$code" == "200" ]]; then
+              echo "Smoke check passed: ${latest} runs ${image} and /readyz returned 200." | tee -a "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+          done
+          echo "::error::The new revision did not pass /readyz with 200 within 3 attempts. Roll back as described in infra/README.md (Rollback)."
+          exit 1
+
+      # Story 1.6 (AD-18): Container Apps sign-in strips a client-sent X-MS-CLIENT-PRINCIPAL, so a
+      # signed-out client forging one (a synthetic principal) must still get 401 from /api/me.
+      - name: Smoke check forged principal gets 401
+        env:
+          APP_FQDN: ${{ steps.foundation_outputs.outputs.app_fqdn }}
+        run: |
+          claims='{"auth_typ":"aad","claims":[{"typ":"http://schemas.microsoft.com/identity/claims/objectidentifier","val":"00000000-0000-4000-8000-00000000f0f0"},{"typ":"name","val":"Forged Synthetic"}],"name_typ":"name","role_typ":"roles"}'
+          forged="$(printf '%s' "$claims" | base64 -w0)"
+          code="$(curl -sS -o /dev/null -w '%{http_code}' --max-time 10 \
+            -H "X-MS-CLIENT-PRINCIPAL: ${forged}" "https://${APP_FQDN}/api/me" || true)"
+          if [[ "$code" != "401" ]]; then
+            echo "::error::GET /api/me with a forged X-MS-CLIENT-PRINCIPAL returned ${code}, not 401. Sign-in is not protecting api; roll back as described in infra/README.md (Rollback)."
+            exit 1
+          fi
+          echo "Smoke check passed: a forged X-MS-CLIENT-PRINCIPAL got 401 from /api/me." | tee -a "$GITHUB_STEP_SUMMARY"
+
+      # 8. Hosted agent smoke check (Story 4.1, owner 2026-09-26 Q2 = A): one Responses call as the
+      # deploy identity (Foundry User on the resource group), with store false and no turn token. The
+      # agent must answer with Story 4.2's fixed no-token reply, which proves the image, env,
+      # identity and endpoint work without calling the model or MCP. Up to 5 minutes for a cold start.
+      # The builds, migrations, agent apply and earlier smoke checks can outlast the last OIDC token.
+      - name: Azure login again (OIDC)
+        uses: azure/login@a641126d1b8aa4d1fa005f4f92df94a3a4c4c906 # v3.1.0
+        with:
+          client-id: ${{ vars.AZURE_CLIENT_ID }}
+          tenant-id: ${{ vars.AZURE_TENANT_ID }}
+          subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Smoke check hosted agent
+        env:
+          PROJECT_ENDPOINT: ${{ steps.foundation_outputs.outputs.project_endpoint }}
+          AGENT_NAME: ${{ steps.foundation_outputs.outputs.agent_name }}
+          EXPECTED_REPLY: "The AI couldn't finish. Answers so far are saved. Please try again."
+        run: |
+          url="${PROJECT_ENDPOINT}/agents/${AGENT_NAME}/endpoint/protocols/openai/responses?api-version=v1"
+          body='{"input": "Deploy smoke check.", "store": false}'
+          reply="$RUNNER_TEMP/agent-smoke.json"
+          deadline=$((SECONDS + 300))
+          attempt=0
+          while ((SECONDS < deadline)); do
+            attempt=$((attempt + 1))
+            token="$(az account get-access-token --resource https://ai.azure.com --query accessToken -o tsv)"
+            echo "::add-mask::${token}"
+            code="$(curl -sS -o "$reply" -w '%{http_code}' --max-time 60 -X POST "$url" \
+              -H "Authorization: Bearer ${token}" -H "Content-Type: application/json" \
+              --data "$body" || true)"
+            echo "attempt ${attempt}: HTTP ${code}"
+            if [[ "$code" == "200" ]] && grep -qF "$EXPECTED_REPLY" "$reply"; then
+              rm -f "$reply"
+              echo "Hosted agent smoke check passed: ${AGENT_NAME} answered with the fixed no-token reply." | tee -a "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Last response (HTTP ${code}):"
+          head -c 2000 "$reply" 2>/dev/null || true
+          echo
+          rm -f "$reply"
+          echo "::error::The hosted agent did not return the fixed reply within 5 minutes. See infra/README.md (Hosted agent smoke check fails)."
+          exit 1

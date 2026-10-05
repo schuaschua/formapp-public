@@ -1,0 +1,93 @@
+/* Base styles: system fonts, the flat canvas, the focus ring and the text minimums (Story 1.4). */
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  /* Body text never drops below 16px (EXPERIENCE.md accessibility floor). */
+  font: var(--font-body);
+  color: var(--color-ink-body);
+  background: var(--color-canvas);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--color-canvas);
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+h1 {
+  font: var(--font-headline-lg);
+  letter-spacing: var(--font-headline-lg-letter-spacing);
+  color: var(--color-ink-heading);
+}
+
+h2 {
+  font: var(--font-headline-md);
+  letter-spacing: var(--font-headline-md-letter-spacing);
+  color: var(--color-ink-heading);
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+a {
+  color: inherit;
+}
+
+/* Every focusable element: 2px forest-accent ring, 2px offset. */
+:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+/* Theme D's blurred glow canvas is retired (DESIGN.md Elevation & Depth): the canvas is now flat
+   `--color-canvas` (set on html/body above). This element is kept, inert, only so every route still
+   has a fixed full-viewport backdrop layer to render behind; it paints nothing and never scrolls or
+   takes clicks. */
+.glow-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Dates line up in lists and tables. */
+.text-date {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Untitled_Proposal_NNN reads as a placeholder name. */
+.text-untitled {
+  font: var(--font-untitled-name);
+}
+
+.text-caption {
+  font: var(--font-caption);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

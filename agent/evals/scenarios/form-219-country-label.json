@@ -1,0 +1,31 @@
+{
+  "id": "form-219-country-label",
+  "description": "FORM-219: a country named in words, not a code, is filled in as its schema x-labels code without asking for or listing codes (synthetic data).",
+  "input": "My customer's country of origin is Malaysia, and she now lives in Singapore.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C4": "MY",
+          "C5": "SG"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "patch_draft": {
+      "applied": ["C4", "C5"],
+      "errors": [],
+      "revision": 2
+    }
+  },
+  "forbidden_answer_keys": ["D1"]
+}

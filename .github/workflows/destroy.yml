@@ -1,0 +1,160 @@
+# Destroy demo (FORM-7 follow-up; azure.md rule 21, terraform.md apply order).
+# Only the owner decides to destroy the demo environment. Started by hand on main, it destroys the
+# agent stack, then foundation, each from a saved destroy plan (never -auto-approve). Run it first
+# with mode "plan" (the default) to read both destroy plans in the run summary, then again with
+# mode "destroy" to apply them (terraform.md rules 26 and 33). The central state store, the deploy
+# identity, formapp-db-admins and the provider registrations stay.
+name: Destroy demo
+
+on:
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: "plan: only show the destroy plans in the run summary. destroy: apply them."
+        required: true
+        type: choice
+        default: plan
+        options: [plan, destroy]
+      confirm:
+        description: "Type rg-sample-demo-sea. With mode destroy, everything in that resource group is deleted, including items Terraform doesn't manage, and all data is lost."
+        required: true
+        type: string
+
+permissions: {}
+
+# Same group as Deploy demo: a destroy never overlaps a deploy, and neither is ever cancelled.
+concurrency:
+  group: deploy-demo
+  cancel-in-progress: false
+
+jobs:
+  destroy:
+    name: Destroy demo
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    # Deployment branch policy: main only (the environment:demo federated credential).
+    environment:
+      name: demo
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      ARM_USE_OIDC: "true"
+      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+      TF_IN_AUTOMATION: "true"
+      TERRAFORM_VERSION: "1.16.4"
+      FOUNDATION_DIR: infra/demo/foundation
+      AGENT_DIR: infra/demo/agent
+      EXPECTED_CONFIRMATION: rg-sample-demo-sea
+      IMAGE_REPOSITORY: api
+    steps:
+      # 1. Refuse a missing confirmation, another branch, or an old main commit, before any Azure login.
+      - name: Refuse without confirmation, or anything but the current main HEAD
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_REF: ${{ github.ref }}
+          RUN_SHA: ${{ github.sha }}
+          CONFIRM: ${{ inputs.confirm }}
+        run: |
+          if [[ "$CONFIRM" != "$EXPECTED_CONFIRMATION" ]]; then
+            echo "::error::Confirmation did not match. Type ${EXPECTED_CONFIRMATION} exactly to destroy the demo environment."
+            exit 1
+          fi
+          if [[ "$RUN_REF" != "refs/heads/main" ]]; then
+            echo "::error::Destroy demo runs only on main; this run is on ${RUN_REF}."
+            exit 1
+          fi
+          head_sha="$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq .sha)"
+          if [[ "$head_sha" != "$RUN_SHA" ]]; then
+            echo "::error::This run is for ${RUN_SHA}, but main is now at ${head_sha}. Start a new run on main."
+            exit 1
+          fi
+          echo "Destroying the demo environment with the configuration of main at ${RUN_SHA}."
+
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e # v4.0.1
+        with:
+          terraform_version: ${{ env.TERRAFORM_VERSION }}
+          terraform_wrapper: false
+
+      # 2. agent first: it reads foundation's outputs, so it must go before foundation.
+      # image_tag and image_repository are required, validated variables; a destroy doesn't use them.
+      - name: agent destroy plan
+        run: |
+          terraform -chdir="$AGENT_DIR" init -input=false
+          terraform -chdir="$AGENT_DIR" plan -destroy -input=false \
+            -var "image_tag=${GITHUB_SHA}" -var "image_repository=${IMAGE_REPOSITORY}" \
+            -out=tfplan
+          {
+            echo "## agent destroy plan"
+            echo
+            echo '````text'
+            terraform -chdir="$AGENT_DIR" show -no-color tfplan | head -c 200000
+            echo '````'
+          } >>"$GITHUB_STEP_SUMMARY"
+
+      - name: agent destroy
+        if: inputs.mode == 'destroy'
+        run: |
+          terraform -chdir="$AGENT_DIR" apply -input=false tfplan
+          rm -f "$AGENT_DIR/tfplan"
+
+      # 3. foundation: deletes rg-sample-demo-sea and everything in it, including PostgreSQL (synthetic data).
+      # With mode plan, the agent stack still exists, so this plan shows foundation as it is today.
+      - name: foundation destroy plan
+        run: |
+          terraform -chdir="$FOUNDATION_DIR" init -input=false
+          terraform -chdir="$FOUNDATION_DIR" plan -destroy -input=false -out=tfplan
+          {
+            echo "## foundation destroy plan"
+            echo
+            echo '````text'
+            terraform -chdir="$FOUNDATION_DIR" show -no-color tfplan | head -c 400000
+            echo '````'
+          } >>"$GITHUB_STEP_SUMMARY"
+
+      - name: foundation destroy
+        if: inputs.mode == 'destroy'
+        run: |
+          terraform -chdir="$FOUNDATION_DIR" apply -input=false tfplan
+          rm -f "$FOUNDATION_DIR/tfplan"
+
+      - name: Plan only
+        if: inputs.mode == 'plan'
+        run: |
+          {
+            echo "## Plan only: nothing was destroyed"
+            echo
+            echo "Read both destroy plans above. To destroy, run **Destroy demo** again on main with mode **destroy**."
+          } >>"$GITHUB_STEP_SUMMARY"
+
+      - name: Next steps
+        if: success() && inputs.mode == 'destroy'
+        run: |
+          {
+            echo "## Destroyed"
+            echo
+            echo "The demo environment (rg-sample-demo-sea) is gone. Kept: the central state store (rg-tfstate-sea),"
+            echo "the deploy identity, formapp-db-admins and the provider registrations."
+            echo
+            echo "Before the next deploy:"
+            echo "1. Rerun \`infra/bootstrap/state-backend.sh\` as an Owner: it recreates rg-sample-demo-sea and the deploy identity's roles on it."
+            echo "2. Run **Deploy demo** on main. Once \`api/alembic.ini\` exists, this first run fails at the migration step: the database is new and has no principals yet."
+            echo "3. Repeat the one-time \`pgaadauth_create_principal\` step in \`infra/bootstrap/README.md\`, then run **Deploy demo** again."
+          } >>"$GITHUB_STEP_SUMMARY"
+
+      - name: If this run failed
+        if: failure() && inputs.mode == 'destroy'
+        run: |
+          {
+            echo "## Destroy stopped partway"
+            echo
+            echo "Nothing after the failed step ran. Terraform state records what was destroyed; the rest still exists."
+            echo "Fix the cause shown in the log and run **Destroy demo** again (mode destroy): it plans only what is left."
+            echo "Running **Deploy demo** instead would recreate what is missing (rerun the bootstrap first if the resource group is gone)."
+          } >>"$GITHUB_STEP_SUMMARY"

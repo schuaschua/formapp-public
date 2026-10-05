@@ -1,0 +1,258 @@
+/* The workspace page menu: expanded list or a collapsed 64px rail (DESIGN.md Components "Page
+   menu"/"Page menu rail", mockups/key-workspace.html .side/.tog/.prog). */
+.page-menu {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  width: var(--page-menu-width);
+  padding: var(--spacing-4) var(--spacing-3);
+  overflow: hidden;
+}
+
+.page-menu--collapsed {
+  align-items: center;
+  width: var(--page-menu-rail-width);
+  background: var(--page-menu-rail-background);
+}
+
+.page-menu__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  width: 100%;
+  padding: 0 var(--spacing-2) var(--spacing-2);
+  color: var(--page-menu-muted);
+  font: var(--font-overline);
+  letter-spacing: var(--font-overline-menu-letter-spacing);
+  text-transform: uppercase;
+}
+
+.page-menu--collapsed .page-menu__head {
+  justify-content: center;
+  padding: 0 0 var(--spacing-2);
+}
+
+.page-menu__toggle {
+  display: grid;
+  flex: none;
+  place-items: center;
+  /* The mockup draws this circle at 26px; the accessibility floor's 40px button minimum
+     (EXPERIENCE.md) wins over the mockup (DESIGN.md's own rule) on the actual click target. */
+  width: var(--target-min-size);
+  height: var(--target-min-size);
+  border: 1px solid var(--color-menu-line);
+  border-radius: var(--rounded-full);
+  background: var(--color-card);
+  color: var(--page-menu-text);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.page-menu__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.page-menu__item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  width: 100%;
+  min-height: var(--target-min-size);
+  padding: var(--spacing-2) var(--spacing-3);
+  border: none;
+  border-radius: var(--rounded-full);
+  background: transparent;
+  color: var(--page-menu-text);
+  font: var(--font-menu-item);
+  text-align: left;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.page-menu--collapsed .page-menu__item {
+  justify-content: center;
+  padding: var(--spacing-2);
+}
+
+.page-menu__item--todo {
+  color: var(--page-menu-muted);
+}
+
+.page-menu__item--current {
+  background: var(--page-menu-item-current-background);
+  color: var(--page-menu-item-current-foreground);
+  font-weight: 700;
+  box-shadow: var(--forest-lift-shadow);
+}
+
+/* Story 3.1, DESIGN.md Components "Page menu": the amber problem box, and the current page's own
+   ring on top of it once it also has a problem. */
+.page-menu__item--problem {
+  background: var(--page-menu-item-problem-background);
+  border-radius: var(--page-menu-item-problem-radius);
+  outline: var(--page-menu-item-problem-outline);
+  outline-offset: -2px;
+}
+
+.page-menu__item--current.page-menu__item--problem {
+  background: var(--page-menu-item-current-background);
+  color: var(--page-menu-item-current-foreground);
+  border-radius: var(--page-menu-item-current-radius);
+  outline: var(--page-menu-item-current-problem-ring);
+  outline-offset: 2px;
+}
+
+.page-menu__badge {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  margin-left: auto;
+  border-radius: var(--rounded-full);
+  background: var(--page-menu-item-problem-badge);
+  color: var(--page-menu-item-problem-badge-foreground);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.page-menu--collapsed .page-menu__badge {
+  position: absolute;
+  bottom: 2px;
+  left: 2px;
+  width: 8px;
+  height: 8px;
+  font-size: 0;
+  background: var(--page-menu-rail-problem-dot);
+}
+
+.page-menu__number {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--color-menu-line);
+  border-radius: var(--rounded-full);
+  color: var(--page-menu-muted);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-menu__item--current .page-menu__number {
+  border-color: var(--page-menu-item-current-foreground);
+  color: var(--page-menu-item-current-foreground);
+}
+
+.page-menu__title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-menu__check {
+  margin-left: auto;
+  color: var(--completion-check-foreground);
+  font-weight: 800;
+}
+
+.page-menu__item--current .page-menu__check {
+  color: var(--page-menu-item-current-foreground);
+}
+
+.page-menu--collapsed .page-menu__check {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  font-size: 10px;
+}
+
+.page-menu--collapsed .page-menu__item {
+  position: relative;
+}
+
+.page-menu__sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.page-menu__progress {
+  margin-top: auto;
+  width: 100%;
+  padding: var(--spacing-3) var(--spacing-2) 0;
+  color: var(--page-menu-muted);
+  font: var(--font-caption);
+}
+
+.page-menu__progress p {
+  margin: 0;
+}
+
+.page-menu__bar {
+  height: 6px;
+  margin-top: var(--spacing-2);
+  overflow: hidden;
+  border-radius: var(--rounded-full);
+  background: var(--progress-bar-track);
+}
+
+.page-menu__bar-fill {
+  display: block;
+  height: 100%;
+  border-radius: var(--rounded-full);
+  background: var(--progress-bar-fill);
+}
+
+/* The zoom proxy (matching WelcomePage.css's convention, spec assumption "200% zoom breakpoint"):
+   the menu drops to the rail on its own once the viewport is this narrow. */
+@media (max-width: 900px) {
+  .page-menu:not(.page-menu--collapsed) {
+    align-items: center;
+    width: var(--page-menu-rail-width);
+    background: var(--page-menu-rail-background);
+  }
+
+  .page-menu:not(.page-menu--collapsed) .page-menu__head {
+    justify-content: center;
+    padding: 0 0 var(--spacing-2);
+  }
+
+  .page-menu:not(.page-menu--collapsed) .page-menu__label,
+  .page-menu:not(.page-menu--collapsed) .page-menu__title,
+  .page-menu:not(.page-menu--collapsed) .page-menu__progress {
+    display: none;
+  }
+
+  .page-menu:not(.page-menu--collapsed) .page-menu__item {
+    position: relative;
+    justify-content: center;
+    padding: var(--spacing-2);
+  }
+
+  .page-menu:not(.page-menu--collapsed) .page-menu__check {
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    font-size: 10px;
+  }
+
+  .page-menu:not(.page-menu--collapsed) .page-menu__badge {
+    position: absolute;
+    bottom: 2px;
+    left: 2px;
+    width: 8px;
+    height: 8px;
+    font-size: 0;
+    background: var(--page-menu-rail-problem-dot);
+  }
+}

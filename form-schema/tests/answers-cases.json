@@ -1,0 +1,518 @@
+{
+  "description": "Shared answer sets for the v1 form schema (Story 1.7). Each case's answers are the base answers with the case's answers laid over them and its omit ids removed; errors lists the question ids that must fail validation (empty means valid). The api checks them with jsonschema (format checking on), the web app with Ajv2020 (Story 1.9). Synthetic data only.",
+  "schema_version": 1,
+  "base": {
+    "N1": "life_health",
+    "N2": 2500,
+    "N3": "Yes",
+    "N4": 2,
+    "N5": 300000,
+    "N6": "No",
+    "N8": "Yes",
+    "P1": "FSH",
+    "P2": [
+      "MATERNITY_NEWBORN"
+    ],
+    "P3": "20",
+    "Y1": "yearly",
+    "Y2": "credit_card",
+    "Y3": "No",
+    "C1": "Ally",
+    "C13": "Macbeal",
+    "C2": "1995-03-14",
+    "C3": "female",
+    "C4": "MY",
+    "C5": "MY",
+    "C6": "SYN-000001",
+    "C7": "ally.macbeal@example.com",
+    "C8": "+60123456789",
+    "C9": "1 Jalan Contoh",
+    "C14": "Kuala Lumpur",
+    "C15": "50000",
+    "C10": "Lawyer",
+    "C11": "single",
+    "C12": "60k_100k",
+    "H1": 165,
+    "H2": 58,
+    "H3": "1_7",
+    "H4": [
+      "none"
+    ],
+    "H5": [
+      "none"
+    ],
+    "H6": "No",
+    "H7": "No",
+    "H8": "No",
+    "H9": "No",
+    "H10": "No",
+    "H11": "No",
+    "H12": "No",
+    "H13": "No",
+    "H14": "No",
+    "G1": "No",
+    "H15": "No"
+  },
+  "cases": [
+    {
+      "name": "complete female proposal (Ally Macbeal)",
+      "answers": {},
+      "errors": []
+    },
+    {
+      "name": "male insured needs no N8, G1 or H15",
+      "answers": {
+        "C3": "male"
+      },
+      "omit": [
+        "N8",
+        "G1",
+        "H15"
+      ],
+      "errors": []
+    },
+    {
+      "name": "pregnancy history answered",
+      "answers": {
+        "G1": "Yes",
+        "G2": [
+          "live_birth",
+          "miscarriage"
+        ],
+        "G3": "2019, no complications"
+      },
+      "errors": []
+    },
+    {
+      "name": "smoker with details",
+      "answers": {
+        "N6": "Yes",
+        "N7": "10 cigarettes a day"
+      },
+      "errors": []
+    },
+    {
+      "name": "optional N5, P2 and C12 left out",
+      "answers": {},
+      "omit": [
+        "N5",
+        "P2",
+        "C12"
+      ],
+      "errors": []
+    },
+    {
+      "name": "no riders",
+      "answers": {
+        "P2": []
+      },
+      "errors": []
+    },
+    {
+      "name": "declaration agreed",
+      "answers": {
+        "D1": true
+      },
+      "errors": []
+    },
+    {
+      "name": "another country code",
+      "answers": {
+        "C4": "SG",
+        "C5": "GB"
+      },
+      "errors": []
+    },
+    {
+      "name": "hazardous activities",
+      "answers": {
+        "H4": [
+          "scuba_diving",
+          "skydiving"
+        ]
+      },
+      "errors": []
+    },
+    {
+      "name": "unknown product type code",
+      "answers": {
+        "N1": "car"
+      },
+      "errors": [
+        "N1"
+      ]
+    },
+    {
+      "name": "budget must be above zero",
+      "answers": {
+        "N2": 0
+      },
+      "errors": [
+        "N2"
+      ]
+    },
+    {
+      "name": "budget must be a number",
+      "answers": {
+        "N2": "2500"
+      },
+      "errors": [
+        "N2"
+      ]
+    },
+    {
+      "name": "more than 10 dependents",
+      "answers": {
+        "N4": 11
+      },
+      "errors": [
+        "N4"
+      ]
+    },
+    {
+      "name": "fewer than 1 dependent",
+      "answers": {
+        "N4": 0
+      },
+      "errors": [
+        "N4"
+      ]
+    },
+    {
+      "name": "dependents must be a whole number",
+      "answers": {
+        "N4": 2.5
+      },
+      "errors": [
+        "N4"
+      ]
+    },
+    {
+      "name": "dependents missing when N3 is Yes",
+      "answers": {},
+      "omit": [
+        "N4"
+      ],
+      "errors": [
+        "N4"
+      ]
+    },
+    {
+      "name": "tobacco details missing when N6 is Yes",
+      "answers": {
+        "N6": "Yes"
+      },
+      "errors": [
+        "N7"
+      ]
+    },
+    {
+      "name": "pregnancy details missing when G1 is Yes",
+      "answers": {
+        "G1": "Yes"
+      },
+      "errors": [
+        "G2",
+        "G3"
+      ]
+    },
+    {
+      "name": "yes/no is case-sensitive",
+      "answers": {
+        "Y3": "no"
+      },
+      "errors": [
+        "Y3"
+      ]
+    },
+    {
+      "name": "height below 100 cm",
+      "answers": {
+        "H1": 99
+      },
+      "errors": [
+        "H1"
+      ]
+    },
+    {
+      "name": "weight above 300 kg",
+      "answers": {
+        "H2": 301
+      },
+      "errors": [
+        "H2"
+      ]
+    },
+    {
+      "name": "unknown country code",
+      "answers": {
+        "C4": "XX"
+      },
+      "errors": [
+        "C4"
+      ]
+    },
+    {
+      "name": "country codes are upper case",
+      "answers": {
+        "C5": "my"
+      },
+      "errors": [
+        "C5"
+      ]
+    },
+    {
+      "name": "invalid email",
+      "answers": {
+        "C7": "not-an-email"
+      },
+      "errors": [
+        "C7"
+      ]
+    },
+    {
+      "name": "mobile not in E.164",
+      "answers": {
+        "C8": "012-3456789"
+      },
+      "errors": [
+        "C8"
+      ]
+    },
+    {
+      "name": "mobile too short",
+      "answers": {
+        "C8": "+6012"
+      },
+      "errors": [
+        "C8"
+      ]
+    },
+    {
+      "name": "impossible date",
+      "answers": {
+        "C2": "1995-02-30"
+      },
+      "errors": [
+        "C2"
+      ]
+    },
+    {
+      "name": "date not YYYY-MM-DD",
+      "answers": {
+        "C2": "14/03/1995"
+      },
+      "errors": [
+        "C2"
+      ]
+    },
+    {
+      "name": "first name empty",
+      "answers": {
+        "C1": ""
+      },
+      "errors": [
+        "C1"
+      ]
+    },
+    {
+      "name": "last name over 50 characters",
+      "answers": {
+        "C13": "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM"
+      },
+      "errors": [
+        "C13"
+      ]
+    },
+    {
+      "name": "repeated multi-choice code",
+      "answers": {
+        "H4": [
+          "none",
+          "none"
+        ]
+      },
+      "errors": [
+        "H4"
+      ]
+    },
+    {
+      "name": "empty multi choice",
+      "answers": {
+        "H5": []
+      },
+      "errors": [
+        "H5"
+      ]
+    },
+    {
+      "name": "unknown multi-choice code",
+      "answers": {
+        "G1": "Yes",
+        "G2": [
+          "twins"
+        ],
+        "G3": "2019"
+      },
+      "errors": [
+        "G2"
+      ]
+    },
+    {
+      "name": "repeated rider",
+      "answers": {
+        "P2": [
+          "CI",
+          "CI"
+        ]
+      },
+      "errors": [
+        "P2"
+      ]
+    },
+    {
+      "name": "declaration must be a boolean",
+      "answers": {
+        "D1": "Yes"
+      },
+      "errors": [
+        "D1"
+      ]
+    },
+    {
+      "name": "required answer missing",
+      "answers": {},
+      "omit": [
+        "C1"
+      ],
+      "errors": [
+        "C1"
+      ]
+    },
+    {
+      "name": "unknown question id",
+      "answers": {
+        "Z9": "Yes"
+      },
+      "errors": [
+        "Z9"
+      ]
+    },
+    {
+      "name": "two invalid answers",
+      "answers": {
+        "C7": "nope",
+        "H1": 260
+      },
+      "errors": [
+        "C7",
+        "H1"
+      ]
+    },
+    {
+      "name": "email without a domain",
+      "answers": {
+        "C7": "ally@"
+      },
+      "errors": [
+        "C7"
+      ]
+    },
+    {
+      "name": "email without a dot in the domain",
+      "answers": {
+        "C7": "a@b"
+      },
+      "errors": [
+        "C7"
+      ]
+    },
+    {
+      "name": "29 February in a non-leap year",
+      "answers": {
+        "C2": "1995-02-29"
+      },
+      "errors": [
+        "C2"
+      ]
+    },
+    {
+      "name": "29 February in a leap year",
+      "answers": {
+        "C2": "1996-02-29"
+      },
+      "errors": []
+    },
+    {
+      "name": "date with a time suffix",
+      "answers": {
+        "C2": "1995-03-14T00:00:00"
+      },
+      "errors": [
+        "C2"
+      ]
+    },
+    {
+      "name": "tobacco details over 500 characters",
+      "answers": {
+        "N6": "Yes",
+        "N7": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "errors": [
+        "N7"
+      ]
+    },
+    {
+      "name": "street address over 200 characters",
+      "answers": {
+        "C9": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+      },
+      "errors": [
+        "C9"
+      ]
+    },
+    {
+      "name": "sum assured must be above zero",
+      "answers": {
+        "N5": 0
+      },
+      "errors": [
+        "N5"
+      ]
+    },
+    {
+      "name": "budget above RM100,000,000",
+      "answers": {
+        "N2": 100000001
+      },
+      "errors": [
+        "N2"
+      ]
+    },
+    {
+      "name": "empty product code",
+      "answers": {
+        "P1": ""
+      },
+      "errors": [
+        "P1"
+      ]
+    },
+    {
+      "name": "unknown alcohol code",
+      "answers": {
+        "H3": "lots"
+      },
+      "errors": [
+        "H3"
+      ]
+    },
+    {
+      "name": "declaration false is schema-valid (submit enforces agreement as declaration_required)",
+      "answers": {
+        "D1": false
+      },
+      "errors": []
+    }
+  ]
+}

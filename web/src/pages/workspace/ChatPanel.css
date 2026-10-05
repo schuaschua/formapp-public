@@ -1,0 +1,241 @@
+/* Story 4.5: the chat panel (DESIGN.md Components "Chat panel"/"Chat input"/"Send button"). */
+
+.chat-panel {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-height: 0;
+  gap: var(--spacing-3);
+}
+
+.chat-panel__messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  min-height: 0;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+}
+
+.chat-panel__error {
+  margin: 0;
+  color: var(--color-ink-secondary);
+  font: var(--font-chat);
+}
+
+/* Bubbles: forest gradient user, right; white AI, left, both 18px radius with a 6px tail corner
+   (DESIGN.md "Chat panel"). */
+.chat-bubble {
+  max-width: 70%;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: 18px;
+  font: var(--font-chat);
+}
+
+.chat-bubble--user {
+  align-self: flex-end;
+  border-bottom-right-radius: 6px;
+  background: var(--chat-bubble-user-background);
+  color: var(--chat-bubble-user-foreground);
+}
+
+.chat-bubble--ai {
+  align-self: flex-start;
+  border-bottom-left-radius: 6px;
+  background: var(--chat-bubble-ai-background);
+  border: var(--chat-bubble-ai-border);
+  color: var(--chat-bubble-ai-foreground);
+}
+
+.chat-bubble__label {
+  display: block;
+  margin-bottom: var(--spacing-1);
+  color: var(--chat-bubble-ai-label);
+  font: var(--font-caption);
+  font-weight: 700;
+}
+
+.chat-bubble__text {
+  white-space: pre-wrap;
+}
+
+/* Streaming: a thin caret plus steel typing dots (DESIGN.md "Chat panel"). */
+.chat-bubble__typing {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  margin-left: var(--spacing-1);
+}
+
+.chat-bubble__caret {
+  width: 1px;
+  height: 1em;
+  background: var(--chat-bubble-ai-label);
+  animation: chat-caret-blink 1s step-end infinite;
+}
+
+.chat-bubble__dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.chat-bubble__dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--rounded-full);
+  background: var(--color-steel-blue);
+  animation: chat-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.chat-bubble__dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.chat-bubble__dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes chat-caret-blink {
+  50% {
+    opacity: 0;
+  }
+}
+
+@keyframes chat-dot-bounce {
+  0%,
+  80%,
+  100% {
+    opacity: 0.3;
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+.chat-panel__input-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+}
+
+.chat-panel__input {
+  flex: 1;
+  height: var(--chat-input-height);
+  padding: 0 var(--spacing-4);
+  border: var(--chat-input-border);
+  border-radius: var(--chat-input-radius);
+  background: var(--chat-input-background);
+  color: var(--color-ink-body);
+  font: var(--font-chat);
+}
+
+.chat-panel__input:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.chat-panel__input:disabled {
+  background: var(--field-read-only-background);
+  color: var(--color-ink-secondary);
+}
+
+.chat-panel__send {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-button-height);
+  height: var(--spacing-button-height);
+  border: none;
+  border-radius: var(--send-button-radius);
+  background: var(--send-button-background);
+  color: var(--send-button-foreground);
+  font: var(--font-button);
+}
+
+.chat-panel__send:disabled {
+  background: var(--send-button-wait-background);
+  border: var(--send-button-wait-border);
+  color: var(--color-grey-mid);
+}
+
+/* Story 4.8: the throttled "Wait Ns" pill (DESIGN.md "send-button-wait", EXPERIENCE.md "Chat
+   input + send") -- widens, in tabular numerals, while turn_active/locked keep the plain disabled
+   circle above. */
+.chat-panel__send--throttled {
+  width: auto;
+  padding: 0 var(--spacing-4);
+  border-radius: var(--send-button-radius);
+  background: var(--send-button-wait-background);
+  border: var(--send-button-wait-border);
+  color: var(--send-button-wait-foreground);
+  font: var(--font-button);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* Story 6.2 (FORM-230): the mic button, the same 40px forest circle as Send, left of it
+   (DESIGN.md "components.mic-button"). */
+.chat-panel__mic {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--spacing-button-height);
+  height: var(--spacing-button-height);
+  border: none;
+  border-radius: var(--mic-button-radius);
+  background: var(--mic-button-background);
+  color: var(--mic-button-foreground);
+  font: var(--font-button);
+}
+
+.chat-panel__mic:disabled {
+  background: var(--send-button-wait-background);
+  border: var(--send-button-wait-border);
+  color: var(--color-grey-mid);
+}
+
+/* Listening: widens to a forest pill, reusing the "Wait Ns" pill's shape (DESIGN.md "Mic
+   button"), in white with the info note's three fading dots. */
+.chat-panel__mic--listening {
+  width: auto;
+  padding: 0 var(--spacing-4);
+  border-radius: var(--mic-button-radius);
+}
+
+.chat-panel__mic-listening {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-1);
+  white-space: nowrap;
+}
+
+.chat-panel__mic-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+
+.chat-panel__mic-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: var(--rounded-full);
+  background: var(--color-white);
+  animation: chat-dot-bounce 1.2s ease-in-out infinite;
+}
+
+.chat-panel__mic-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.chat-panel__mic-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+/* UX-DR45: caption sits under the input row, never red. */
+.chat-panel__mic-caption {
+  margin: 0;
+  color: var(--color-ink-secondary);
+  font: var(--font-caption);
+}

@@ -1,0 +1,482 @@
+/* The proposal workspace (Story 1.9, DESIGN.md Layout & Spacing "Proposal workspace",
+   mockups/key-workspace.html .ws/.work/.form/.tbl): a 3:1 vertical split -- page menu + form card
+   on top, a full-width chat frame below. */
+.workspace {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--spacing-card-gap);
+  min-height: 0;
+}
+
+.workspace__work {
+  display: grid;
+  flex: 3;
+  /* auto: the column follows the menu's own width, so the form card widens when it collapses to the rail. */
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--spacing-card-gap);
+  min-height: 0;
+}
+
+.workspace__form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  padding: var(--spacing-4) var(--spacing-6) var(--spacing-4);
+  /* FORM-225: a grid item's default min-height is auto (its content's natural size), which used to
+     force this card -- and everything above it, up to `.app-shell` -- taller than the viewport
+     whenever the question table had more rows than fit, so the whole page scrolled instead of just
+     this card. `min-height: 0` lets it take exactly the grid row's height, so `overflow: auto`
+     below actually gets a bounded box to scroll within. */
+  min-height: 0;
+  overflow: auto;
+  overflow-wrap: anywhere;
+}
+
+.workspace__form-head {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  min-height: 34px;
+}
+
+.workspace__form-head h2 {
+  margin: 0;
+  font: var(--font-headline-md);
+  letter-spacing: var(--font-headline-md-letter-spacing);
+  color: var(--color-ink-heading);
+}
+
+/* FORM-227: the workspace's own delete-draft button. No margin-left: auto here -- the preceding
+   status element (.ws-save-status/.workspace__lock-note/.ws-submitted-strip), when present, already
+   carries that same auto margin and pulls the whole trailing group (this one included, right after
+   it in DOM order) flush right; a second auto margin here would split the row's free space between
+   the two, opening an unwanted gap. */
+.workspace__delete-draft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Save status (Story 1.10, DESIGN.md Components "Save status"): left of the form's action area;
+   blank until the first edit, so it takes up no visible space then. */
+.ws-save-status {
+  margin-left: auto;
+  color: var(--save-status-foreground);
+  font: var(--save-status-typography);
+}
+
+/* The lock-elsewhere note and its "Edit here instead" button (Story 4.4, DESIGN.md "Other-window
+   note"): same right-aligned slot the save status otherwise occupies. */
+.workspace__lock-note {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-left: auto;
+}
+
+.ws-save-status__check {
+  color: var(--save-status-check);
+}
+
+/* The submitted strip (Story 3.2, DESIGN.md Components "Submitted strip"): a forest-tint pill in
+   the same right-aligned slot the save status/lock note otherwise occupy, once the proposal is
+   submitted -- there is nothing left to save or lock by then. */
+.ws-submitted-strip {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  margin-left: auto;
+  padding: var(--spacing-1) var(--spacing-4);
+  border: var(--submitted-strip-border);
+  border-radius: var(--submitted-strip-radius);
+  background: var(--submitted-strip-background);
+  color: var(--submitted-strip-foreground);
+  font: var(--font-caption);
+}
+
+.ws-submitted-strip__check {
+  font-weight: 700;
+}
+
+/* FORM-218: the customer number, shown after the submitted date in the same pill. */
+.ws-submitted-strip__customer-number {
+  opacity: 0.85;
+}
+
+/* The red system-failure banner (Story 1.10, DESIGN.md Components "System failure banner"): a
+   failed save and a lost connection get the identical treatment. */
+.ws-banner {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-3);
+  padding: var(--spacing-3) var(--spacing-4);
+  border: var(--system-error-banner-border);
+  border-radius: var(--system-error-banner-radius);
+  background: var(--system-error-banner-background);
+  color: var(--system-error-banner-foreground);
+  font: var(--font-body);
+}
+
+.ws-banner__icon {
+  color: var(--system-error-banner-icon);
+  font-weight: 700;
+}
+
+.ws-banner__retry {
+  margin-left: auto;
+  height: var(--spacing-control-height);
+  padding: 0 var(--spacing-3);
+  border: var(--button-secondary-border);
+  border-radius: var(--button-secondary-radius);
+  background: var(--button-secondary-background);
+  color: var(--button-secondary-foreground);
+  font: var(--font-caption);
+}
+
+/* "Submit proposal" (Story 3.1, DESIGN.md Layout & Spacing "Proposal workspace"): bottom right of
+   the form card, with its disabled reason (PillButton's own `.pill-button-reason`) beside it. */
+.ws-submit-row {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: var(--spacing-2);
+}
+
+.workspace__error {
+  margin: 0;
+  padding: var(--spacing-4);
+  border: var(--system-error-banner-border);
+  border-radius: var(--system-error-banner-radius);
+  background: var(--system-error-banner-background);
+  color: var(--system-error-banner-foreground);
+  font: var(--font-body);
+}
+
+/* Story 4.5: the chat panel's own frame; ChatPanel.css lays out its contents. */
+.workspace__chat {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  padding: var(--spacing-4) var(--spacing-5);
+}
+
+/* Question | Answer table (DESIGN.md Components "Question row"/"Section heading"). */
+.ws-tbl {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--question-row-answer-width);
+  column-gap: var(--spacing-5);
+}
+
+.ws-tbl__row,
+.ws-tbl__row--head {
+  display: contents;
+}
+
+.ws-tbl__cell {
+  display: flex;
+  align-items: center;
+  min-height: var(--question-row-min-height);
+  padding: var(--spacing-1) 0;
+  border-bottom: 1px solid var(--question-row-divider);
+}
+
+.ws-tbl__cell--head {
+  min-height: 24px;
+  border-bottom: 1.5px solid var(--color-divider-strong);
+  color: var(--color-ink-secondary);
+  font: var(--font-caption);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.ws-tbl__cell--question {
+  color: var(--color-ink-heading);
+  font: var(--question-row-label);
+}
+
+.ws-tbl__row--sub .ws-tbl__cell--question {
+  padding-left: var(--question-row-followup-indent);
+  color: var(--color-ink-body);
+  font-weight: 500;
+}
+
+/* The amber rejected-value highlight (Story 1.10, DESIGN.md Components "Problem highlight"):
+   shown at once on a 422, cleared the moment a valid value for that field saves (UX-DR43). */
+.ws-tbl__cell--problem {
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--problem-highlight-radius);
+  background: var(--problem-highlight-background);
+  border-bottom: var(--problem-highlight-underline);
+}
+
+/* DESIGN.md Components "Problem highlight": "trailing 18px ! badge (dark ink on amber, thin dark
+   ring)". */
+.ws-problem__badge {
+  position: absolute;
+  top: var(--spacing-2);
+  right: var(--spacing-3);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: 1px solid var(--color-ink-heading);
+  border-radius: var(--rounded-full);
+  background: var(--problem-highlight-badge);
+  color: var(--problem-highlight-badge-foreground);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.ws-problem__message {
+  margin: 0;
+  padding-right: 24px;
+  color: var(--problem-highlight-message);
+  font: var(--font-caption);
+  font-weight: 700;
+}
+
+.ws-tbl__section {
+  grid-column: 1 / -1;
+  min-height: 24px;
+  padding-top: var(--spacing-1);
+  border-bottom: 1px solid var(--color-divider-strong);
+  color: var(--section-heading-foreground);
+  font: var(--section-heading-typography);
+}
+
+/* Skeleton rows (DESIGN.md Components "Skeleton rows"): shape of the coming question/answer rows. */
+.ws-tbl--skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.ws-tbl--skeleton .ws-tbl__row {
+  display: flex;
+  gap: var(--spacing-5);
+  min-height: var(--question-row-min-height);
+}
+
+.ws-skeleton-bar {
+  display: block;
+  height: 16px;
+  border-radius: var(--skeleton-row-radius);
+  background: var(--skeleton-row-background);
+  animation: ws-skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+.ws-skeleton-bar--question {
+  width: 40%;
+}
+
+.ws-skeleton-bar--answer {
+  width: var(--question-row-answer-width);
+}
+
+@keyframes ws-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Answer controls not covered by RJSF's own default widgets (DESIGN.md Components "Answer
+   controls"), styled to the same 36px/8px-corner control shape. */
+.ws-seg,
+.ws-checklist {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 2px;
+  border: var(--text-input-border);
+  border-radius: var(--segmented-choice-radius);
+  background: var(--segmented-choice-background);
+}
+
+.ws-seg__option,
+.ws-checklist__option {
+  display: inline-flex;
+  align-items: center;
+  /* Story 1.10: these became real buttons (Story 1.9 shipped them as display-only spans); the
+     accessibility floor's 40px target (EXPERIENCE.md "Targets") applies now that they're
+     focusable and clickable. */
+  min-height: 40px;
+  padding: 0 var(--spacing-3);
+  border: none;
+  border-radius: var(--segmented-choice-radius);
+  background: transparent;
+  color: var(--text-input-foreground);
+  font: var(--font-answer);
+  cursor: pointer;
+}
+
+.ws-seg__option:disabled,
+.ws-checklist__option:disabled {
+  cursor: default;
+  opacity: var(--button-disabled-opacity);
+}
+
+.ws-seg__option--on,
+.ws-checklist__option--on {
+  background: var(--segmented-choice-selected-background);
+  color: var(--segmented-choice-selected-foreground);
+  font-weight: 650;
+}
+
+/* Story 4.4: read-only fields (AI reply, lock elsewhere) -- DESIGN.md Components "Read-only
+   field": flat fill, no shadow, not-allowed cursor; a selected segment turns ink-secondary rather
+   than fading like a merely-unavailable control (`P1`/`P2`/`P3`, coding-style.md rule 17). */
+.ws-seg__option--on:disabled,
+.ws-checklist__option--on:disabled {
+  background: var(--field-read-only-selected-background);
+  color: var(--color-white);
+  opacity: 1;
+}
+
+/* FORM-223: `.ws-unit-input` used to have no width of its own, so its `<input>` child's
+   `width: 100%` had nothing definite to resolve against (a percentage width needs a containing
+   block with a definite width) -- the browser fell back to the input's own intrinsic default
+   width, which could be wider than the answer cell and push (or visually stack) the unit label
+   onto/under the input rather than sitting beside it. Giving the wrapper `width: 100%` (of the
+   440px answer cell, which does have a definite width) and letting the input fill only the
+   *remaining* space with `flex: 1; min-width: 0` keeps the unit always beside its own input,
+   never overlapping it, at any width. */
+.ws-unit-input {
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: var(--text-input-height);
+  padding: 0 var(--spacing-3);
+  border: var(--text-input-border);
+  border-radius: var(--text-input-radius);
+  background: var(--text-input-background);
+}
+
+.ws-unit-input__field {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  color: var(--text-input-foreground);
+  font: var(--font-answer);
+}
+
+.ws-unit-input__field:focus {
+  outline: none;
+}
+
+.ws-unit-input__field[readonly] {
+  cursor: not-allowed;
+}
+
+.ws-unit-input__unit {
+  flex: none;
+  margin-left: var(--spacing-2);
+  color: var(--color-ink-secondary);
+  font: var(--font-caption);
+}
+
+.ws-no-options {
+  display: inline-flex;
+  align-items: center;
+  height: var(--text-input-height);
+  padding: 0 var(--spacing-3);
+  border: var(--field-read-only-border);
+  border-radius: var(--text-input-radius);
+  background: var(--field-read-only-background);
+  color: var(--color-ink-secondary);
+  font: var(--font-answer);
+}
+
+/* Native inputs/selects/textareas (RJSF's own default widgets) get the same control shape. */
+.ws-tbl .form-control {
+  width: 100%;
+  height: var(--text-input-height);
+  padding: 0 var(--spacing-3);
+  border: var(--text-input-border);
+  border-radius: var(--text-input-radius);
+  background: var(--text-input-background);
+  color: var(--text-input-foreground);
+  font: var(--font-answer);
+}
+
+/* Story 4.4: read-only (AI reply, lock elsewhere) -- DESIGN.md Components "Read-only field". */
+.ws-tbl .form-control[readonly],
+.ws-tbl .form-control:disabled {
+  background: var(--field-read-only-background);
+  border: var(--field-read-only-border);
+  cursor: not-allowed;
+}
+
+.ws-tbl textarea.form-control {
+  height: auto;
+  min-height: calc(var(--text-input-height) * 2);
+  padding: var(--spacing-2) var(--spacing-3);
+}
+
+/* Story 2.3's read-only price summary (epic-2-context.md "Price summary on pages 2 and 3"): sits
+   below the question table, built only from `quote`. */
+.ws-price-summary {
+  margin-top: var(--spacing-4);
+  padding-top: var(--spacing-3);
+  border-top: 1px solid var(--color-divider-strong);
+  color: var(--color-ink-body);
+  font: var(--font-answer);
+}
+
+.ws-price-summary--placeholder {
+  color: var(--color-ink-secondary);
+  font: var(--font-caption);
+}
+
+.ws-price-summary__lines {
+  margin: 0 0 var(--spacing-2);
+  padding: 0;
+  list-style: none;
+}
+
+.ws-price-summary__total {
+  margin: 0;
+  font-weight: 650;
+}
+
+/* The zoom proxy (matching WelcomePage.css's convention, spec assumption "200% zoom breakpoint"):
+   each question stacks above its answer. */
+@media (max-width: 900px) {
+  .ws-tbl {
+    grid-template-columns: 1fr;
+  }
+
+  .ws-tbl__row--head {
+    display: none;
+  }
+
+  .ws-tbl__row {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding-bottom: var(--spacing-2);
+  }
+
+  .ws-tbl__cell {
+    width: 100%;
+    border-bottom: none;
+  }
+
+  .ws-tbl__cell--question {
+    border-bottom: none;
+  }
+
+  .ws-tbl__cell--answer {
+    border-bottom: 1px solid var(--question-row-divider);
+  }
+}

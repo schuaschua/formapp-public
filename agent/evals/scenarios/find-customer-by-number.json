@@ -1,0 +1,40 @@
+{
+  "id": "find-customer-by-number",
+  "description": "FORM-218: given a customer number up front, the agent searches by number alone rather than asking for name and date of birth (synthetic seed content).",
+  "input": "My customer already exists. Her number is CUS-10023.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "customer_number": "CUS-10023"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "find_customer": [
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000001",
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20",
+        "city": "Petaling Jaya",
+        "customer_number": "CUS-10023"
+      }
+    ]
+  },
+  "forbidden_calls": [
+    {
+      "name": "link_customer"
+    }
+  ],
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

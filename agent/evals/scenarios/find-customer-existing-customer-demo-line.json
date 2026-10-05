@@ -1,0 +1,44 @@
+{
+  "id": "find-customer-existing-customer-demo-line",
+  "description": "FORM-218 acceptance criterion (the spec's own demo line): 'existing customer ally 1994 november' resolves, through find_customer, to Ally Macbeal alone, and no C-field is filled before a confirmation-shaped reply -- whatever else the same turn does with the product/budget parts (synthetic seed content).",
+  "input": "existing customer ally 1994 november. she wants a cheap life and health product. her budget is 200 a month",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "ally",
+        "date_of_birth": "1994-11"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "find_customer": [
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000001",
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20",
+        "city": "Petaling Jaya",
+        "customer_number": "CUS-10023"
+      }
+    ]
+  },
+  "forbidden_calls": [
+    {
+      "name": "link_customer"
+    }
+  ],
+  "forbidden_answer_keys": [
+    "D1",
+    "C1",
+    "C13",
+    "C2"
+  ]
+}

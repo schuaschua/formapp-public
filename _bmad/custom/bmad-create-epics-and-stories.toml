@@ -1,0 +1,6 @@
+[workflow]
+persistent_facts = [
+  "Break epics into a hybrid structure: setup work gets separate stories per layer (Terraform + git, CI/CD, FastAPI, React, monitoring); feature stories stay end-to-end with a **Tasks:** list after the acceptance criteria, one task per layer (Terraform, FastAPI, React, tests). Tasks become Jira Subtasks.",
+  "Work through epics one at a time: propose the story breakdown as a table, get approval, then write acceptance criteria.",
+]
+on_complete = "Offer to sync the epics and stories to Jira project FORM (example.atlassian.net) through the Atlassian MCP server: show the full list of issues to create or update, create or update only after explicit approval, update existing issues instead of creating duplicates, and use Epic → Story → Subtask with story ids in summaries and FR/AD/UX-DR ids as labels."

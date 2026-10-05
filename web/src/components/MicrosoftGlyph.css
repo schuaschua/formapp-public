@@ -1,0 +1,14 @@
+/* Four white squares in a 2x2 grid (DESIGN.md Sign-in button). */
+.microsoft-glyph {
+  display: inline-grid;
+  grid-template-columns: repeat(2, var(--microsoft-glyph-square));
+  gap: var(--microsoft-glyph-gap);
+  flex-shrink: 0;
+}
+
+.microsoft-glyph > span {
+  display: block;
+  width: var(--microsoft-glyph-square);
+  height: var(--microsoft-glyph-square);
+  background: currentColor;
+}

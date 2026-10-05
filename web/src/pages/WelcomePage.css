@@ -1,0 +1,183 @@
+/* Welcome: one split flat card centred on the canvas, left 0.92fr (wordmark, tagline, sign-in pill)
+   and right 1.08fr (photo with floating chips) (DESIGN.md Welcome, mockups/key-welcome.html). */
+.welcome {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  min-height: 100vh;
+  padding: var(--welcome-page-padding);
+}
+
+.welcome-card {
+  display: grid;
+  grid-template-columns: var(--welcome-card-columns);
+  gap: var(--spacing-card-gap);
+  width: 100%;
+  max-width: var(--shell-max-width);
+  min-height: var(--welcome-card-min-height);
+  padding: var(--welcome-card-padding);
+  border-radius: var(--welcome-card-radius);
+}
+
+.welcome-card__panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: var(--welcome-panel-padding);
+  border-radius: var(--welcome-card-inner-radius);
+  background: var(--welcome-panel-background);
+}
+
+.welcome-card__hero {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-5);
+}
+
+.welcome-wordmark {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  font: var(--font-display);
+  letter-spacing: var(--font-display-letter-spacing);
+  color: var(--color-ink-heading);
+}
+
+.welcome-wordmark__tile {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--welcome-tile-size);
+  height: var(--welcome-tile-size);
+  border-radius: var(--welcome-tile-radius);
+  background: var(--logo-tile-background);
+  box-shadow: var(--welcome-tile-shadow);
+  color: var(--color-white);
+  font: var(--welcome-tile-font);
+  letter-spacing: normal;
+}
+
+.welcome-card__tagline {
+  max-width: var(--welcome-tagline-max-width);
+  font-size: var(--font-welcome-tagline-size);
+  color: var(--color-ink-body);
+}
+
+/* The primary pill at the 52px modal height, full width of the panel up to 380px. */
+.welcome-sign-in {
+  width: 100%;
+  max-width: var(--welcome-sign-in-max-width);
+  min-height: var(--spacing-modal-button-height);
+  gap: var(--spacing-3);
+  text-decoration: none;
+}
+
+/* The label sits bottom right, clear of the chips at every width. */
+.welcome-photo {
+  position: relative;
+  display: grid;
+  place-items: end;
+  padding: var(--spacing-4) var(--spacing-5);
+  min-height: var(--welcome-photo-min-height);
+  border: var(--welcome-photo-placeholder-border);
+  border-radius: var(--welcome-card-inner-radius);
+  background: var(--welcome-photo-placeholder-background);
+}
+
+.welcome-photo__label {
+  font: var(--font-caption);
+  color: var(--welcome-photo-placeholder-foreground);
+}
+
+.welcome-chips {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.welcome-chip {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  width: var(--welcome-chip-width);
+  max-width: calc(100% - 2 * var(--spacing-5));
+  padding: var(--welcome-chip-padding);
+  border-radius: var(--floating-chip-radius);
+  background: var(--floating-chip-background);
+  font: var(--font-caption);
+  color: var(--color-ink-body);
+}
+
+.welcome-chip--proposal {
+  top: 10%;
+  right: 6%;
+}
+
+.welcome-chip--chat {
+  bottom: 12%;
+  left: 6%;
+}
+
+.welcome-chip__label {
+  font: var(--font-overline);
+  letter-spacing: var(--font-overline-letter-spacing);
+  text-transform: uppercase;
+  color: var(--color-ink-secondary);
+}
+
+.welcome-chip__name {
+  font: var(--font-list-name);
+  color: var(--color-ink-heading);
+}
+
+.welcome-chip__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+.welcome-chip__ai {
+  padding: 0 var(--spacing-2);
+  border-radius: var(--rounded-full);
+  background: var(--welcome-chip-ai-background);
+  color: var(--welcome-chip-ai-foreground);
+}
+
+.welcome-chip__bar {
+  display: block;
+  height: var(--welcome-chip-bar-height);
+  margin-top: var(--spacing-1);
+  border-radius: var(--rounded-full);
+  background:
+    var(--button-primary-background) 0 0 / var(--welcome-chip-bar-fill) 100%
+      no-repeat,
+    var(--progress-bar-track);
+}
+
+.welcome-chip__bubble {
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--welcome-chip-bubble-radius);
+  background: var(--welcome-chip-bubble-background);
+  color: var(--welcome-chip-bubble-foreground);
+}
+
+/* Narrow windows and 200% zoom: stack the panels so nothing scrolls sideways. A media query can't
+   read a custom property, so the breakpoint is written here. */
+@media (max-width: 900px) {
+  .welcome {
+    padding: var(--welcome-page-padding-narrow);
+  }
+
+  .welcome-card {
+    grid-template-columns: minmax(0, 1fr);
+    min-height: 0;
+  }
+
+  .welcome-photo {
+    min-height: var(--welcome-photo-min-height);
+  }
+}

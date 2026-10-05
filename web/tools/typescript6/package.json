@@ -1,0 +1,10 @@
+{
+  "name": "formapp-typescript6",
+  "version": "0.0.0",
+  "private": true,
+  "description": "The TypeScript 6 compiler API for typescript-eslint, which can't use TypeScript 7 yet. See eslint.config.js.",
+  "main": "index.cjs",
+  "dependencies": {
+    "typescript": "6.0.3"
+  }
+}

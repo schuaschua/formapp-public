@@ -1,0 +1,51 @@
+{
+  "id": "form-220-policy-term-default",
+  "description": "FORM-220: once a product (P1) is chosen and the insurance agent named no term, P3 is filled from that product's own default_term in the same turn (synthetic seed content, LT20's 20_yrs default of its 10/20/30-year terms).",
+  "input": "My customer wants SecureLife Term.",
+  "expected_calls": [
+    {
+      "name": "get_products"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "P1": "LT20",
+          "P3": "20_yrs"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_products": {
+      "products": [
+        {
+          "code": "LT20",
+          "name": "SecureLife Term",
+          "type": "life",
+          "covers_dependents": true,
+          "policy_terms": [
+            {"code": "10_yrs", "label": "10 yrs"},
+            {"code": "20_yrs", "label": "20 yrs"},
+            {"code": "30_yrs", "label": "30 yrs"}
+          ],
+          "sum_assured_min": 100000,
+          "sum_assured_max": 500000,
+          "default_sum_assured": 200000,
+          "default_term": "20_yrs",
+          "min_age": 18,
+          "max_age": 60,
+          "monthly": 69.46,
+          "yearly": 791.82,
+          "riders": []
+        }
+      ]
+    },
+    "patch_draft": {
+      "applied": ["P1", "P3"],
+      "errors": [],
+      "revision": 3
+    }
+  },
+  "forbidden_answer_keys": ["D1"]
+}

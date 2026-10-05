@@ -1,0 +1,50 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+tfplan
+crash.log
+*.auto.tfvars
+secrets.tfvars
+
+# Secrets and local env
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Node
+node_modules/
+dist/
+web/dist/
+coverage/
+playwright-report/
+test-results/
+
+# Local tooling
+.claude/settings.local.json
+.DS_Store
+
+# Reference PDFs (large; available online)
+docs/standards/azure/*.pdf
+
+# Throwaway spike code
+spikes/
+
+# Local working files (never committed)
+.work/
+
+# Token ledger written by Scrooge (org kit; local only; the hook rewrites it constantly)
+docs/token_usage/
+docs/cost_estimates/
+_bmad/memory/agent-scrooge/rate-card.json

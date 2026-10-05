@@ -1,0 +1,77 @@
+[project]
+name = "formapp-api"
+version = "0.1.0"
+description = "formapp api: FastAPI service with the domain, REST and MCP adapters (spine AD-2)."
+requires-python = "==3.13.*"
+# Exact pins (security.md rule 26); the spine Stack table fixes the framework versions.
+dependencies = [
+    "aiohttp==3.14.3",
+    "alembic==1.20.0",
+    "azure-identity==1.25.3",
+    "azure-monitor-opentelemetry==1.8.10",
+    "azure-storage-blob==12.30.3",
+    "fastapi==0.141.1",
+    "jsonschema==4.26.0",
+    "mcp==2.2.0",
+    "openai==3.19.2",
+    "opentelemetry-instrumentation-psycopg==0.65b0",
+    "psycopg[binary]==3.3.6",
+    "pydantic==2.13.5",
+    "pydantic-settings==2.15.0",
+    "pyjwt==2.15.0",
+    "sqlalchemy[asyncio]==2.0.54",
+    "uvicorn==0.53.0",
+]
+
+[dependency-groups]
+dev = [
+    "asgi-lifespan==2.1.0",
+    "httpx2==2.13.1",
+    "mypy==2.3.1",
+    "pytest==9.1.1",
+    "pytest-cov==7.1.0",
+    "ruff==0.16.9",
+    "types-jsonschema==4.26.0.20260518",
+]
+
+# An application, not a library: uv installs only the dependencies; the code runs from this folder.
+[tool.uv]
+package = false
+
+[tool.ruff]
+target-version = "py313"
+
+[tool.ruff.lint]
+# Ruff defaults plus import order, bugbear, pyupgrade and security (coding-style.md rule 1 table).
+extend-select = ["I", "B", "UP", "S"]
+
+[tool.ruff.lint.per-file-ignores]
+# assert is how pytest checks results.
+"tests/**" = ["S101"]
+
+[tool.mypy]
+python_version = "3.13"
+exclude = ["^\\.venv/"]
+
+# coding-style.md: strict for the domain, default elsewhere.
+[[tool.mypy.overrides]]
+module = ["domain", "domain.*"]
+strict = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = "-ra"
+markers = [
+    "p0: security-critical tests (Story 4.3) that must never be skipped or filtered out",
+]
+
+[tool.coverage.run]
+source = ["domain", "adapters", "migrations", "jobs"]
+branch = true
+
+[tool.coverage.report]
+# coding-style.md rule 25: never lower it; add tests instead.
+fail_under = 80
+show_missing = true
+skip_covered = true

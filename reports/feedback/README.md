@@ -1,0 +1,59 @@
+# AI feedback dashboard (Power BI, built in the browser)
+
+Story 7.4 (FORM-240), spine AD-20. Product and tech leads see how helpful the AI is: rating trends and the comments sorted into categories. Owner decision 2026-09-28: built at app.powerbi.com with no Power BI Desktop, because there's no Windows machine. The model is created in the browser, so no dataflow is needed.
+
+**Data:** every night at 02:00 MYT the feedback job (Stories 7.2 and 7.3) categorises new comments and overwrites `feedback.csv` in the private `feedback-export` container of the `stsamplefbdemosea` storage account. The file has no customer data: the proposal and the agent are salted hashes, and product code, rating, comment, category and date are the only other values.
+
+`feedback-export` has its own storage account (FORM-240), separate from the sign-in token store's `stsampledemosea`: Power BI records a Blob source by storage account and, when saving credentials, test-lists every container on that account. With `feedback-export` next to the token store's private `tokenstore` container on one account, `formapp-feedback-readers`'s Reader role (scoped to `feedback-export` only) still let that per-account test see `tokenstore`, and Power BI rejected the credentials as invalid ("Skip test connection" isn't offered). A dedicated account, where account-level read is harmless because it holds nothing else, fixes it.
+
+**Who:** a Power BI Pro user in the Azure subscription's tenant who is in the Entra group `formapp-feedback-readers` (today: powerbi.user@example.com). Every viewer needs Power BI Pro (or a trial).
+
+## Build it (one time, about 20 minutes)
+
+1. **Workspace.** At [app.powerbi.com](https://app.powerbi.com), signed in as powerbi.user@example.com: **Workspaces → New workspace**, name it `Formapp`, license mode **Pro**.
+2. **Semantic model.** In that workspace, choose **New item → Semantic model** (or **Create → Get data**), which opens Power Query in the browser.
+   - Choose **Blank query**, open the **Advanced editor**, and paste the whole of [`feedback.pq`](./feedback.pq).
+   - When asked for credentials for `stsamplefbdemosea`, choose **Organizational account → Sign in** as powerbi.user@example.com, with privacy level **Organizational**.
+   - Rename the query to `feedback` and **Create** (or **Save**). Name the semantic model `formapp AI feedback`.
+3. **Measures.** Open the semantic model and choose **Open data model**. For each line in [`measures.dax`](./measures.dax), select the `feedback` table, **New measure**, and paste it. Format `Average rating` to 2 decimals, and the two shares as percentages.
+4. **Report.** From the semantic model, choose **Create a report → Start from scratch**, then build one page:
+   - Card: **Average rating**. Card: **Feedback count**. Card: **Low rating share**.
+   - Line chart: **Average rating** by `submitted_date` (date hierarchy on week).
+   - Bar chart: **Feedback count** by `category`.
+   - Matrix: rows `category`, columns `product_code`, values **Average rating**.
+   - Table: `submitted_date`, `product_code`, `rating`, `category`, `comment`, sorted by date descending.
+   - Slicers: `category`, `product_code`, `submitted_date` (between).
+   - Save it as `AI feedback`.
+5. **Nightly refresh.** In the workspace, open the semantic model's **Settings → Refresh**, turn on **Scheduled refresh** at **03:00**, time zone **(UTC+08:00) Kuala Lumpur, Singapore**, after the 02:00 job. Under **Data source credentials**, check it's signed in as powerbi.user@example.com (OAuth2).
+6. **Share.** Give the leads access to the workspace (Viewer) or share the report. Each lead needs Power BI Pro. Only the account whose credentials the refresh uses (step 5) must be in `formapp-feedback-readers`; viewers see the imported data without storage access.
+
+## Data before the first night
+
+To fill `feedback.csv` straight away rather than at 02:00, start the job once (the owner runs it; it needs Azure access):
+
+```
+az containerapp job start --resource-group rg-sample-demo-sea --name caj-sample-demo-sea-feedback
+```
+
+Then refresh the semantic model once (**Refresh now**).
+
+## When it breaks
+
+- **Credentials expired or refresh fails with 403:** the user isn't in `formapp-feedback-readers`, or its sign-in expired. Re-enter the data source credentials (step 5).
+- **The file isn't there:** the job hasn't run since Story 7.3 was deployed, or PostgreSQL is paused (the job fails harmlessly while it is). Start the job as above.
+- **Category shows "Pending":** that comment's model call failed; the next night's run retries it.
+- **The report's shape changes:** edit it in the browser; this README, `feedback.pq` and `measures.dax` are the record of what it should contain, so update them in the same pull request.
+
+## Report as code (optional)
+
+The report page can also be created or updated from the repository instead of by hand. `report/definition/` holds the page and its 11 visuals in PBIR format, generated by `report/build_definition.py`. `report/deploy_report.py` uploads them through the Fabric REST API as the Power BI user:
+
+```
+AZURE_CONFIG_DIR=.work/az-powerbi az login --tenant <tenant id> --allow-no-subscriptions   # once, as powerbi.user@example.com
+python3 reports/feedback/report/build_definition.py        # after changing the layout
+SSL_CERT_FILE=$(uv run --quiet --with certifi python -c "import certifi; print(certifi.where())") \
+  python3 reports/feedback/report/deploy_report.py          # creates or updates "AI feedback" in "Formapp"
+```
+
+`SSL_CERT_FILE` is only needed on a python.org Python on macOS, which ships without root certificates. The script finds the workspace and semantic model by name, creates the report or updates its definition, and never touches the model or its credentials.
+

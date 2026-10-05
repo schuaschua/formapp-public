@@ -1,0 +1,208 @@
+{
+  "id": "rm2000-product",
+  "description": "FORM-28/CAP-7: a Life + Health product around RM2,000 a year that covers dependents leaves only FSH -- the 'covers dependents' filter (get_products' covers_dependents) is what narrows it to one, not the retired closest-to-budget rule (owner decision 2026-09-27); paid yearly. Prices are the seed content's, for a synthetic insured aged 31 (Story 2.3 shape; rider codes are stand-ins).",
+  "input": "Not a smoker, a life and health product that costs around RM2,000 a year and covers my dependents.",
+  "expected_calls": [
+    {
+      "name": "get_products"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "P1": "FSH",
+          "Y1": "yearly"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_products": [
+      {
+        "code": "LT20",
+        "name": "SecureLife Term",
+        "type": "Life",
+        "covers_dependents": true,
+        "policy_terms": [
+          10,
+          20,
+          30
+        ],
+        "sum_assured_min": 100000,
+        "sum_assured_max": 500000,
+        "default_sum_assured": 200000,
+        "default_term": 20,
+        "min_age": 18,
+        "max_age": 60,
+        "monthly": 69.46,
+        "yearly": 791.82,
+        "riders": [
+          {
+            "code": "LT20-CI",
+            "name": "Critical illness",
+            "monthly": 23.15,
+            "yearly": 263.94
+          },
+          {
+            "code": "LT20-AD",
+            "name": "Accidental death",
+            "monthly": 9.26,
+            "yearly": 105.58
+          },
+          {
+            "code": "LT20-WP",
+            "name": "Waiver of premium",
+            "monthly": 5.79,
+            "yearly": 65.98
+          }
+        ]
+      },
+      {
+        "code": "FSH",
+        "name": "FamilyShield Life & Health",
+        "type": "Life + Health",
+        "covers_dependents": true,
+        "policy_terms": [
+          20,
+          30
+        ],
+        "sum_assured_min": 200000,
+        "sum_assured_max": 600000,
+        "default_sum_assured": 300000,
+        "default_term": 20,
+        "min_age": 18,
+        "max_age": 55,
+        "monthly": 185.22,
+        "yearly": 2111.51,
+        "riders": [
+          {
+            "code": "FSH-HC",
+            "name": "Hospital cash",
+            "monthly": 17.36,
+            "yearly": 197.95
+          },
+          {
+            "code": "FSH-CI",
+            "name": "Critical illness",
+            "monthly": 28.94,
+            "yearly": 329.92
+          },
+          {
+            "code": "FSH-CC",
+            "name": "Child cover",
+            "monthly": 13.89,
+            "yearly": 158.36
+          },
+          {
+            "code": "FSH-MN",
+            "name": "Maternity & newborn",
+            "monthly": 34.73,
+            "yearly": 395.91
+          }
+        ]
+      },
+      {
+        "code": "ELH",
+        "name": "Essentials Life & Health",
+        "type": "Life + Health",
+        "covers_dependents": false,
+        "policy_terms": [
+          10,
+          20
+        ],
+        "sum_assured_min": 100000,
+        "sum_assured_max": 300000,
+        "default_sum_assured": 150000,
+        "default_term": 10,
+        "min_age": 18,
+        "max_age": 60,
+        "monthly": 115.76,
+        "yearly": 1319.69,
+        "riders": [
+          {
+            "code": "ELH-HC",
+            "name": "Hospital cash",
+            "monthly": 13.89,
+            "yearly": 158.36
+          },
+          {
+            "code": "ELH-CI",
+            "name": "Critical illness",
+            "monthly": 23.15,
+            "yearly": 263.94
+          }
+        ]
+      },
+      {
+        "code": "CFH",
+        "name": "CareFirst Health",
+        "type": "Health",
+        "covers_dependents": true,
+        "policy_terms": [
+          1
+        ],
+        "sum_assured_min": null,
+        "sum_assured_max": null,
+        "default_sum_assured": null,
+        "default_term": 1,
+        "min_age": 18,
+        "max_age": 65,
+        "monthly": 52.09,
+        "yearly": 593.86,
+        "riders": [
+          {
+            "code": "CFH-DO",
+            "name": "Dental & optical",
+            "monthly": 11.58,
+            "yearly": 131.97
+          },
+          {
+            "code": "CFH-OP",
+            "name": "Outpatient",
+            "monthly": 17.36,
+            "yearly": 197.95
+          }
+        ]
+      },
+      {
+        "code": "LWL",
+        "name": "Legacy Whole Life",
+        "type": "Life",
+        "covers_dependents": true,
+        "policy_terms": [
+          "whole_of_life"
+        ],
+        "sum_assured_min": 250000,
+        "sum_assured_max": 1000000,
+        "default_sum_assured": 500000,
+        "default_term": "whole_of_life",
+        "min_age": 18,
+        "max_age": 70,
+        "monthly": 300.98,
+        "yearly": 3431.2,
+        "riders": [
+          {
+            "code": "LWL-WP",
+            "name": "Waiver of premium",
+            "monthly": 11.58,
+            "yearly": 131.97
+          },
+          {
+            "code": "LWL-AD",
+            "name": "Accidental death",
+            "monthly": 13.89,
+            "yearly": 158.36
+          }
+        ]
+      }
+    ],
+    "patch_draft": {
+      "applied": [
+        "P1",
+        "Y1"
+      ],
+      "errors": [],
+      "revision": 3
+    }
+  }
+}

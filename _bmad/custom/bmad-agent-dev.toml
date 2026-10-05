@@ -1,0 +1,4 @@
+[agent]
+persistent_facts = [
+  "file:docs/standards/*.md",
+]

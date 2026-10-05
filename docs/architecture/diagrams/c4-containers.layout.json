@@ -1,0 +1,83 @@
+{
+  "nodes": {
+    "agentuser": [
+      110,
+      200
+    ],
+    "entra": [
+      110,
+      430
+    ],
+    "speech": [
+      110,
+      700
+    ],
+    "web": [
+      420,
+      200
+    ],
+    "pg": [
+      420,
+      610
+    ],
+    "tokens": [
+      680,
+      200
+    ],
+    "api": [
+      680,
+      380
+    ],
+    "agent": [
+      680,
+      750
+    ],
+    "schema": [
+      940,
+      200
+    ],
+    "job": [
+      940,
+      610
+    ],
+    "fbstore": [
+      940,
+      800
+    ],
+    "appi": [
+      1380,
+      200
+    ],
+    "model": [
+      1380,
+      610
+    ],
+    "powerbi": [
+      1380,
+      800
+    ]
+  },
+  "colours": {
+    "api": "#0B6FBF",
+    "web": "#0891B2",
+    "agent": "#7B3FBF",
+    "model": "#C2410C",
+    "pg": "#15803D",
+    "speech": "#BE185D",
+    "tokens": "#0F766E",
+    "fbstore": "#A16207",
+    "appi": "#64748B",
+    "entra": "#111827",
+    "schema": "#4D7C0F"
+  },
+  "label_at": {
+    "api>speech": -0.2,
+    "web>speech": 0.3,
+    "job>pg": 0.45,
+    "web>api": -0.35,
+    "api>appi": 0.4,
+    "agent>appi": 0.4,
+    "agent>model": 0.6,
+    "api>pg": -0.3
+  }
+}

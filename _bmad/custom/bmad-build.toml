@@ -1,0 +1,60 @@
+# POC-only overrides (owner, 2026-09-27). The full bmad-build workflow
+# (all three review layers, hosted CI evidence, full spec derivation, all
+# standards loaded) returns when UAT or production work begins on formapp.
+
+[workflow]
+# Org Kit 1.7.0 offer, merged by bmad-customize (owner, 2026-09-28); the POC overrides below are unchanged.
+on_complete = "First, the end-of-epic AI feedback: run `uv run .claude/skills/agent-scrooge/scripts/ai_feedback.py {project-root} pending` (Scrooge McDuck's script; resolve {project-root} to the project folder). For each epic it lists under pending (a finished epic nobody has rated yet), ask the user, one epic at a time, as a multiple-choice question: 'How would you rate the AI on <epic> (its number and title), from 1 (very poor) to 5 (excellent)?'. Only if the rating is 1 or 2 (poor), ask a second question, allowing more than one answer: 'What went wrong?' with the options AI coding standard not up to quality; AI testing standards not up to quality; AI decision-making was flawed; AI answers were not grounded in company data; Poor AI security / compliance suggestions; Other (please specify), and for Other ask what it was. Record the answer with `... ai_feedback.py {project-root} record --epic <n> --rating <1-5>` plus, for a poor rating, one `--category` per answer (coding, testing, decisions, grounding, security, other) and `--other '<their words>'` for Other. If the user declines to rate, record it with `--skip` so they are not asked again. If the script answers invalid, fix the answer from its errors (ask again if needed) and record it. Say nothing about feedback when nothing is pending. Then check whether the project's delivery is finished: read the sprint status (_bmad-output/implementation-artifacts/sprint-status.yaml, or wherever the project keeps sprint-status.yaml). Only if every epic and every story in it is done, and the project has not been closed out yet (no estimate model *.estimate.json in the org config's cost_estimates_folder, default docs/cost_estimates, has a close_out entry), ask the user once whether Scrooge McDuck (the agent-scrooge skill) should close out the project now: how long it took from the first BMad stage to the last epic, the total Claude API calls and their cost at Claude's list prices, added to the cost estimate workbook for the dashboard. Suggest a fresh session (/clear, then 'Scrooge, close out the project'); start Scrooge here only on an explicit yes. If anything is still open, or the close-out exists, say nothing about it."
+persistent_facts = [
+  "file:docs/standards/security.md",
+  "file:docs/standards/coding-style.md",
+  "POC-only override (owner, 2026-09-27): when the change touches infra/, also read docs/standards/terraform.md and docs/standards/azure.md; otherwise don't load them.",
+  "POC-only override (owner, 2026-09-27): GitHub Actions runs no pull-request checks, only the deploy and destroy workflows. The implementation step runs `scripts/check.sh` once, for the sections the change touches, before handing back; it writes the output to `.work/check/<JIRA-KEY>.log` and reads only the summary and failures. Review and checkpoint steps accept that summary as the verification evidence and must not rerun the test suites themselves.",
+  "POC-only override (owner, 2026-09-27): the story's Jira subtasks and its epics.md acceptance criteria are the plan. Keep the spec brief: the intent, the ACs mapped to the subtasks, the files to touch, and the [ASSUMPTION]s. Load only the ADs the story cites, plus the DESIGN/EXPERIENCE sections for the screens it touches — don't re-derive the whole architecture. Restore full architecture derivation when UAT or production work begins.",
+  "POC-only override (owner, 2026-09-27, token saving): if `.work/briefs/<JIRA-KEY>.md` exists, it is the story's context. Read it instead of epics.md, ARCHITECTURE-SPINE.md, DESIGN.md and EXPERIENCE.md, and open those only for a specific section the brief names.",
+]
+
+# POC-only (owner, 2026-09-27): the implementation subagent runs on Sonnet
+# and runs scripts/check.sh once at the end (GitHub Actions no longer runs PR
+# checks). Restore hosted CI evidence for UAT/production.
+implementation_handoff = """
+Launch a subagent on the Sonnet model, with no prior conversation context, with this prompt:
+
+> Read {spec_file} fully and implement it — the spec is the sole source of truth. Load every file listed in its frontmatter `context:` before you start.
+>
+> Start every status or progress line, and every Bash tool description, with the story's Jira key, e.g. "FORM-26 · ".
+>
+> When the implementation is done, run `scripts/check.sh` once (it picks the sections the change touches) with its output redirected to `.work/check/<JIRA-KEY>.log`, and read only the summary and any failures. Fix the failures and rerun only the failing sections. Don't run the test suites any other way.
+>
+> When done, report what you changed, the check summary, and anything left incomplete or risky.
+"""
+
+# POC-only (owner, 2026-09-27): single review layer, edge-case-hunter, run on
+# Haiku for token saving. blind-hunter and verification-gap are disabled (empty
+# instruction). Restore all three, on the default model, for UAT/production.
+
+[[workflow.review_layers]]
+id = "blind-hunter"
+name = "Blind Hunter"
+instruction = ""
+
+[[workflow.review_layers]]
+id = "edge-case-hunter"
+name = "Edge Case Hunter"
+instruction = """
+Launch a context-free subagent on the Haiku model with this prompt:
+
+Read `{skill-root}/review-prompts/edge-case-hunter.md` completely and follow it as your review instructions.
+
+claims_file (leave unread until your instructions call for it): {claims_file}
+
+Review content: the unified diff at `{diff_file}`. Read that file — it is the content under review.
+
+Do not invoke any skill, and do not spawn subagents of your own — you are the reviewer. If the instruction file is unreadable, report that exact failure and stop. Return your findings as text in your final message; do not route them through any findings-reporting tool the host may offer.
+
+"""
+
+[[workflow.review_layers]]
+id = "verification-gap"
+name = "Verification Gap Reviewer"
+instruction = ""

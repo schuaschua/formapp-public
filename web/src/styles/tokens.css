@@ -1,0 +1,383 @@
+/*
+ * Theme E "Forest" design tokens: the only file allowed to hold colour values (Story 1.4,
+ * coding-style.md rule 17). Everything in the first block mirrors the DESIGN.md frontmatter one to
+ * one (src/tests/design-tokens.test.ts checks it); the second block holds values DESIGN.md gives in
+ * its prose (fonts, depth, focus ring). Change DESIGN.md first, then this file.
+ */
+:root {
+  /* Colours */
+  --color-white: #ffffff;
+  --color-forest: #123b34;
+  --color-forest-dark: #0b2622;
+  --color-forest-accent: #1b6e52;
+  --color-forest-accent-dark: #145440;
+  --color-amber: #fdbb2f;
+  --color-red: #ee1b2e;
+  --color-steel-blue: #7baabe;
+  --color-steel-blue-dark: #445e69;
+  --color-ink-heading: #16241f;
+  --color-ink-body: #3a4a44;
+  --color-ink-secondary: #63706a;
+  --color-grey-mid: #8b968f;
+  --color-light-grey: #c7ccc8;
+  --color-canvas: #f5f6f4;
+  --color-card: #ffffff;
+  --color-field: #f3f4f4;
+  --color-field-read-only: #eceeec;
+  --color-border-field: #dce0dc;
+  --color-border-locked: #b7c0bb;
+  --color-divider: #e4e6e3;
+  --color-divider-strong: #c7ccc8;
+  --color-menu-line: #e4e6e3;
+  --color-forest-tint: #e7f1ec;
+  --color-forest-border: #1b6e5273;
+  --color-amber-tint-row: #fdbb2f4d;
+  --color-amber-tint-menu: #fdbb2f33;
+  --color-steel-tint-note: #7baabe38;
+  --color-draft-chip: #3a4a4414;
+  --color-tab-track: #3a4a4412;
+  --color-forest-tint-select: #1b6e5212;
+  --color-red-tint-banner: #ee1b2e14;
+  --color-scrim: #16241f8c;
+
+  /* Typography: one shorthand per token, plus its letter spacing where DESIGN.md sets one */
+  --font-display: 800 56px/1 var(--font-family-system);
+  --font-display-size: 56px;
+  --font-display-letter-spacing: -0.035em;
+  --font-headline-lg: 800 30px/1.1 var(--font-family-system);
+  --font-headline-lg-size: 30px;
+  --font-headline-lg-letter-spacing: -0.02em;
+  --font-headline-md: 800 24px/1.05 var(--font-family-system);
+  --font-headline-md-size: 24px;
+  --font-headline-md-letter-spacing: -0.02em;
+  --font-modal-body: 400 19px/1.5 var(--font-family-system);
+  --font-modal-body-size: 19px;
+  --font-modal-body-letter-spacing: normal;
+  --font-declaration: 600 20px/1.45 var(--font-family-system);
+  --font-declaration-size: 20px;
+  --font-declaration-letter-spacing: normal;
+  --font-toast: 700 19px var(--font-family-system);
+  --font-toast-size: 19px;
+  --font-toast-letter-spacing: normal;
+  --font-list-name: 700 18px var(--font-family-system);
+  --font-list-name-size: 18px;
+  --font-list-name-letter-spacing: normal;
+  --font-body: 400 16px/1.45 var(--font-family-system);
+  --font-body-size: 16px;
+  --font-body-letter-spacing: normal;
+  --font-menu-item: 400 15px var(--font-family-system);
+  --font-menu-item-size: 15px;
+  --font-menu-item-letter-spacing: normal;
+  --font-button: 700 15px var(--font-family-system);
+  --font-button-size: 15px;
+  --font-button-letter-spacing: normal;
+  --font-question: 600 16px/1.35 var(--font-family-system);
+  --font-question-size: 16px;
+  --font-question-letter-spacing: normal;
+  --font-chat: 400 16px/1.4 var(--font-family-system);
+  --font-chat-size: 16px;
+  --font-chat-letter-spacing: normal;
+  --font-answer: 400 16px var(--font-family-system);
+  --font-answer-size: 16px;
+  --font-answer-letter-spacing: normal;
+  --font-section-label: 800 14px var(--font-family-system);
+  --font-section-label-size: 14px;
+  --font-section-label-letter-spacing: 0.02em;
+  --font-caption: 700 14px var(--font-family-system);
+  --font-caption-size: 14px;
+  --font-caption-letter-spacing: normal;
+  --font-overline: 700 14px var(--font-family-system);
+  --font-overline-size: 14px;
+  --font-overline-letter-spacing: 0.06em;
+  --font-untitled-name: 600 16px var(--font-family-mono);
+  --font-untitled-name-size: 16px;
+  --font-untitled-name-letter-spacing: normal;
+
+  /* Corner radii */
+  --rounded-sm: 8px;
+  --rounded-md: 12px;
+  --rounded-lg: 16px;
+  --rounded-header: 18px;
+  --rounded-xl: 20px;
+  --rounded-xxl: 26px;
+  --rounded-shell: 30px;
+  --rounded-full: 9999px;
+
+  /* Spacing and sizes */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-card-gap: 14px;
+  --spacing-screen-padding: 20px;
+  --spacing-header-height: 56px;
+  --spacing-menu-width: 200px;
+  --spacing-menu-rail-width: 64px;
+  --spacing-row-height: 44px;
+  --spacing-control-height: 36px;
+  --spacing-list-row-height: 58px;
+  --spacing-button-height: 40px;
+  --spacing-modal-button-height: 52px;
+  --spacing-modal-width: 640px;
+
+  /* Components */
+  --flat-card-background: var(--color-card);
+  --flat-card-border: none;
+  --flat-card-radius: var(--rounded-xl);
+  --app-header-background: var(--color-forest);
+  --app-header-radius: 0;
+  --app-header-height: var(--spacing-header-height);
+  --app-header-foreground: var(--color-white);
+  --page-menu-background: var(--color-card);
+  --page-menu-width: var(--spacing-menu-width);
+  --page-menu-text: var(--color-ink-heading);
+  --page-menu-muted: var(--color-ink-secondary);
+  --page-menu-item-current-background: var(--color-forest);
+  --page-menu-item-current-foreground: var(--color-white);
+  --page-menu-item-current-radius: var(--rounded-full);
+  --page-menu-item-problem-background: var(--color-amber-tint-menu);
+  --page-menu-item-problem-outline: 2px inset var(--color-amber);
+  --page-menu-item-problem-radius: var(--rounded-md);
+  --page-menu-item-problem-badge: var(--color-amber);
+  --page-menu-item-problem-badge-foreground: var(--color-ink-heading);
+  --page-menu-rail-background: var(--color-card);
+  --page-menu-rail-width: var(--spacing-menu-rail-width);
+  --page-menu-rail-done-dot: var(--color-forest-accent);
+  --page-menu-rail-problem-dot: var(--color-amber);
+  --completion-check-foreground: var(--color-forest-accent);
+  --progress-bar-track: var(--color-menu-line);
+  --progress-bar-fill: linear-gradient(
+    90deg,
+    var(--color-forest),
+    var(--color-forest-dark)
+  );
+  --question-row-label: var(--font-question);
+  --question-row-divider: var(--color-divider);
+  --question-row-min-height: var(--spacing-row-height);
+  --section-heading-foreground: var(--color-forest-accent);
+  --section-heading-typography: var(--font-section-label);
+  --text-input-height: var(--spacing-control-height);
+  --text-input-background: var(--color-field);
+  --text-input-border: 1px solid var(--color-border-field);
+  --text-input-radius: var(--rounded-sm);
+  --text-input-foreground: var(--color-ink-body);
+  --segmented-choice-background: var(--color-field);
+  --segmented-choice-selected-background: var(--color-forest);
+  --segmented-choice-selected-foreground: var(--color-white);
+  --segmented-choice-radius: var(--rounded-full);
+  --field-read-only-background: var(--color-field-read-only);
+  --field-read-only-border: 1px dashed var(--color-border-locked);
+  --field-read-only-selected-background: var(--color-ink-secondary);
+  --problem-highlight-background: var(--color-amber-tint-row);
+  --problem-highlight-underline: 2px solid var(--color-amber);
+  --problem-highlight-radius: var(--rounded-sm) var(--rounded-sm) 0 0;
+  --problem-highlight-badge: var(--color-amber);
+  --problem-highlight-badge-foreground: var(--color-ink-heading);
+  --problem-highlight-message: var(--color-ink-heading);
+  --info-note-background: var(--color-steel-tint-note);
+  --info-note-foreground: var(--color-steel-blue-dark);
+  --info-note-radius: var(--rounded-full);
+  --button-primary-background: linear-gradient(
+    145deg,
+    var(--color-forest),
+    var(--color-forest-dark)
+  );
+  --button-primary-foreground: var(--color-white);
+  --button-primary-radius: var(--rounded-full);
+  --button-primary-height: var(--spacing-button-height);
+  --button-secondary-background: var(--color-card);
+  --button-secondary-border: 1.5px solid var(--color-forest);
+  --button-secondary-foreground: var(--color-forest);
+  --button-secondary-radius: var(--rounded-full);
+  --button-cancel-border: 1.5px solid var(--color-grey-mid);
+  --button-cancel-foreground: var(--color-ink-body);
+  --button-cancel-radius: var(--rounded-full);
+  --button-destructive-background: var(--color-red-tint-banner);
+  --button-destructive-border: 2px solid var(--color-red);
+  --button-destructive-foreground: var(--color-ink-heading);
+  --button-destructive-radius: var(--rounded-full);
+  --button-disabled-opacity: 0.42;
+  --button-disabled-shadow: none;
+  --save-status-typography: var(--font-caption);
+  --save-status-foreground: var(--color-ink-secondary);
+  --save-status-check: var(--color-forest-accent);
+  --system-error-banner-background: var(--color-red-tint-banner);
+  --system-error-banner-border: 2px solid var(--color-red);
+  --system-error-banner-icon: var(--color-red);
+  --system-error-banner-foreground: var(--color-ink-heading);
+  --system-error-banner-radius: var(--rounded-md);
+  --skeleton-row-background: var(--color-field-read-only);
+  --skeleton-row-radius: var(--rounded-sm);
+  --submitted-strip-background: var(--color-forest-tint);
+  --submitted-strip-border: 1px solid var(--color-forest-border);
+  --submitted-strip-foreground: var(--color-forest-accent-dark);
+  --submitted-strip-radius: var(--rounded-full);
+  --avatar-menu-background: var(--color-card);
+  --avatar-menu-radius: var(--rounded-md);
+  --avatar-menu-foreground: var(--color-ink-heading);
+  --chat-panel-background: var(--color-card);
+  --chat-panel-radius: var(--rounded-xl);
+  --chat-bubble-user-background: linear-gradient(
+    145deg,
+    var(--color-forest),
+    var(--color-forest-dark)
+  );
+  --chat-bubble-user-foreground: var(--color-white);
+  --chat-bubble-ai-background: var(--color-field);
+  --chat-bubble-ai-border: 1px solid var(--color-light-grey);
+  --chat-bubble-ai-foreground: var(--color-ink-body);
+  --chat-bubble-ai-label: var(--color-steel-blue-dark);
+  --chat-input-background: var(--color-field);
+  --chat-input-border: 1px solid var(--color-border-field);
+  --chat-input-radius: var(--rounded-full);
+  --chat-input-height: var(--spacing-button-height);
+  --send-button-background: linear-gradient(
+    145deg,
+    var(--color-forest),
+    var(--color-forest-dark)
+  );
+  --send-button-foreground: var(--color-white);
+  --send-button-radius: var(--rounded-full);
+  --mic-button-background: linear-gradient(
+    145deg,
+    var(--color-forest),
+    var(--color-forest-dark)
+  );
+  --mic-button-foreground: var(--color-white);
+  --mic-button-radius: var(--rounded-full);
+  --send-button-wait-background: var(--color-field-read-only);
+  --send-button-wait-foreground: var(--color-ink-body);
+  --send-button-wait-border: 1px solid var(--color-grey-mid);
+  --tabs-track: var(--color-tab-track);
+  --tabs-selected-background: var(--color-ink-heading);
+  --tabs-selected-foreground: var(--color-white);
+  --tabs-radius: var(--rounded-full);
+  --proposal-list-row-name: var(--font-list-name);
+  --proposal-list-row-min-height: var(--spacing-list-row-height);
+  --proposal-list-row-divider: var(--color-divider);
+  --status-chip-draft-background: var(--color-draft-chip);
+  --status-chip-draft-foreground: var(--color-ink-body);
+  --status-chip-draft-radius: var(--rounded-full);
+  --status-chip-submitted-background: var(--color-forest-tint);
+  --status-chip-submitted-border: 1px solid var(--color-forest-border);
+  --status-chip-submitted-foreground: var(--color-forest-accent-dark);
+  --status-chip-submitted-radius: var(--rounded-full);
+  --modal-background: var(--color-card);
+  --modal-radius: var(--rounded-xxl);
+  --modal-width: var(--spacing-modal-width);
+  --modal-scrim: var(--color-scrim);
+  --declaration-box-background: var(--color-field-read-only);
+  --declaration-box-border: 1px solid var(--color-border-field);
+  --declaration-box-radius: var(--rounded-lg);
+  --declaration-box-typography: var(--font-declaration);
+  --rating-tile-background: var(--color-white);
+  --rating-tile-border: 1.5px solid var(--color-grey-mid);
+  --rating-tile-star: var(--color-light-grey);
+  --rating-tile-star-filled: var(--color-forest-accent);
+  --rating-tile-selected-background: var(--color-forest-tint-select);
+  --rating-tile-selected-border: var(--color-forest-accent);
+  --rating-tile-selected-foreground: var(--color-forest-accent-dark);
+  --rating-tile-radius: var(--rounded-lg);
+  --toast-success-background: var(--color-card);
+  --toast-success-border: 1px solid var(--color-forest-border);
+  --toast-success-icon: var(--color-forest-accent);
+  --toast-success-radius: var(--rounded-full);
+  --welcome-card-radius: var(--rounded-shell);
+  --welcome-card-inner-radius: 22px;
+  --floating-chip-background: var(--color-card);
+  --floating-chip-radius: var(--rounded-lg);
+
+  /* From the DESIGN.md prose */
+  /* Story 3.1, DESIGN.md Components "Page menu": "current + problem: forest pill plus a 2.5px
+     amber ring outside it" -- prose text, not a frontmatter component token. */
+  --page-menu-item-current-problem-ring: 2.5px solid var(--color-amber);
+
+  /* Typography: the system stack, no web fonts */
+  --font-family-system:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+  --font-family-mono:
+    ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --font-welcome-tagline-size: 19px;
+  --font-overline-menu-letter-spacing: 0.08em;
+
+  /* Elevation & Depth: one soft flat-card shadow (ink-heading at 6% + 6%, no glass edge or
+     highlight -- Theme E has no glass). */
+  --flat-card-shadow:
+    0 1px 2px rgba(22, 36, 31, 0.06), 0 8px 20px rgba(22, 36, 31, 0.06);
+  /* Forest lift under primary buttons, the send button, current page and user bubbles */
+  --forest-lift-shadow: 0 6px 14px rgba(18, 59, 52, 0.24);
+  --modal-shadow: 0 24px 70px rgba(22, 36, 31, 0.35);
+  --toast-shadow: 0 16px 40px rgba(22, 36, 31, 0.25);
+
+  /* Accessibility floor (EXPERIENCE.md): 2px forest-accent focus ring, 2px offset; 40px targets */
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--color-forest-accent);
+  --target-min-size: var(--spacing-button-height);
+
+  /* Buttons */
+  --button-border-width: 1.5px;
+  --button-padding-inline: var(--spacing-5);
+  --button-modal-padding-inline: var(--spacing-6);
+
+  /* App shell: solid forest header, white text, a muted white for the non-current breadcrumb */
+  --logo-tile-size: 32px;
+  --logo-tile-radius: 10px;
+  --logo-tile-background: var(--color-forest-dark);
+  --logo-font-size: 17px;
+  --shell-max-width: 1280px;
+  --app-header-muted: rgba(255, 255, 255, 0.75);
+
+  /* Avatar (Story 1.6): steel-blue gradient circle, white initial, 2px white ring */
+  --avatar-size: 34px;
+  --avatar-background: linear-gradient(
+    145deg,
+    var(--color-steel-blue),
+    var(--color-steel-blue-dark)
+  );
+  --avatar-foreground: var(--color-white);
+  --avatar-ring: 2px solid var(--color-white);
+  --avatar-shadow: 0 3px 8px rgba(22, 36, 31, 0.25);
+  --avatar-menu-shadow: var(--toast-shadow);
+  --avatar-menu-min-width: 180px;
+
+  /* Welcome (Story 1.6): split card, 64px wordmark tile, sign-in pill and photo panel. No glow --
+     the left panel is a flat canvas-tinted inset inside the white card. */
+  --welcome-page-padding: 56px 88px;
+  --welcome-page-padding-narrow: var(--spacing-screen-padding);
+  --welcome-card-padding: var(--spacing-card-gap);
+  --welcome-card-columns: minmax(0, 0.92fr) minmax(0, 1.08fr);
+  --welcome-card-min-height: 560px;
+  --welcome-panel-padding: 26px 40px 24px;
+  --welcome-panel-background: var(--color-canvas);
+  --welcome-tile-size: 64px;
+  --welcome-tile-radius: var(--rounded-xl);
+  --welcome-tile-font: 800 32px var(--font-family-system);
+  --welcome-tile-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.16), 0 10px 24px rgba(18, 59, 52, 0.32);
+  --welcome-tagline-max-width: 400px;
+  --welcome-sign-in-max-width: 380px;
+  --welcome-photo-min-height: 320px;
+  --welcome-photo-placeholder-background: var(--color-field-read-only);
+  --welcome-photo-placeholder-border: 1px dashed var(--color-border-locked);
+  --welcome-photo-placeholder-foreground: var(--color-ink-secondary);
+  --welcome-chip-padding: var(--spacing-3) 14px;
+  --welcome-chip-width: 250px;
+  --welcome-chip-ai-background: var(--color-steel-tint-note);
+  --welcome-chip-ai-foreground: var(--color-steel-blue-dark);
+  --welcome-chip-bubble-background: var(--button-primary-background);
+  --welcome-chip-bubble-foreground: var(--color-white);
+  --welcome-chip-bubble-radius: 14px 14px 4px 14px;
+  --welcome-chip-bar-height: 6px;
+  --welcome-chip-bar-fill: 78%;
+  --microsoft-glyph-square: 8px;
+  --microsoft-glyph-gap: 2px;
+
+  /* Proposal workspace (Story 1.9): the form row's answer column width and follow-up indent, both
+     stated in DESIGN.md's prose (Layout & Spacing), not its frontmatter component tokens. */
+  --question-row-answer-width: 440px;
+  --question-row-followup-indent: 18px;
+}

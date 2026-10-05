@@ -1,0 +1,12 @@
+# Secret scan configuration (the `secrets` section of scripts/check.sh): gitleaks' default rules, plus path allowlists for
+# known false positives in vendored BMad files, which change only through a BMad update.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "BMad file manifest: SHA-256 content hashes of files named *token*, not secrets"
+paths = ['''^_bmad/_config/files-manifest\.csv$''']
+
+[[allowlists]]
+description = "BMad test-architect knowledge docs: made-up example tokens in code samples"
+paths = ['''^\.(claude|agents)/skills/bmad-[a-z-]+/resources/knowledge/api-testing-patterns\.md$''']

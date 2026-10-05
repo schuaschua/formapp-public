@@ -1,0 +1,41 @@
+{
+  "id": "form-221-multipart-name",
+  "description": "FORM-221: a multi-part customer name is split into C1/C13 in the same turn, the agent's best guess at the last name (synthetic data).",
+  "input": "My customer is Maria Dela Cruz, born 3rd March 1988.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Maria",
+          "C13": "Dela Cruz",
+          "C2": "1988-03-03"
+        }
+      }
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "Maria",
+        "last_name": "Dela Cruz",
+        "date_of_birth": "1988-03-03"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "patch_draft": {
+      "applied": ["C1", "C13", "C2"],
+      "errors": [],
+      "revision": 2
+    },
+    "find_customer": []
+  },
+  "forbidden_answer_keys": ["D1"]
+}

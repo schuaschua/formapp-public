@@ -1,0 +1,46 @@
+# Dependency update pull requests, all into dev (security.md rules 26-27).
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: /api
+    target-branch: dev
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps"
+
+  - package-ecosystem: npm
+    directory: /web
+    target-branch: dev
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps"
+
+  # The api image's digest-pinned base image.
+  - package-ecosystem: docker
+    directory: /api
+    target-branch: dev
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps"
+
+  - package-ecosystem: github-actions
+    directory: /
+    target-branch: dev
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps"
+
+  - package-ecosystem: terraform
+    directories:
+      - /infra/demo/foundation
+      - /infra/demo/agent
+      - /infra/modules/resource-group
+    target-branch: dev
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "deps"

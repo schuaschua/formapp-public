@@ -1,0 +1,108 @@
+{
+  "id": "repick-after-dob-change",
+  "description": "FR7, FR36, FR33, Story 2.3: a date-of-birth correction is patched, then validate_draft's invalid_value/out_of_range errors on the ai-set P1 and P3 make the agent re-pick them from get_products; N5 gets the same out_of_range error but its provenance shows a human set it, so it is left alone (synthetic seed content).",
+  "input": "Actually, she was born on 3 March 1985, not 20 November 1994, and she still wants the cheapest life and health product that covers dependents.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C2": "1985-03-03"
+        }
+      }
+    },
+    {
+      "name": "validate_draft"
+    },
+    {
+      "name": "get_products"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "P1": "FSH",
+          "P3": "20_yrs"
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 6,
+      "answers": {
+        "C2": "1994-11-20",
+        "P1": "FSH",
+        "P3": "20_yrs",
+        "N5": 550000
+      },
+      "provenance": {
+        "C2": {"source": "human", "updated_at": "2026-09-27T08:00:00Z"},
+        "P1": {"source": "ai", "updated_at": "2026-09-27T08:05:00Z"},
+        "P3": {"source": "ai", "updated_at": "2026-09-27T08:05:00Z"},
+        "N5": {"source": "human", "updated_at": "2026-09-27T08:10:00Z"}
+      }
+    },
+    "patch_draft": {
+      "applied": ["C2", "P1", "P3"],
+      "errors": [],
+      "revision": 8
+    },
+    "validate_draft": {
+      "errors": [
+        {"field": "P1", "code": "invalid_value", "message": "no longer eligible"},
+        {"field": "P3", "code": "invalid_value", "message": "not one of the product's terms"},
+        {"field": "N5", "code": "out_of_range", "message": "outside the product's sum-assured range"}
+      ]
+    },
+    "get_products": {
+      "products": [
+        {
+          "code": "FSH",
+          "name": "FamilyShield Life & Health",
+          "type": "life_health",
+          "covers_dependents": true,
+          "policy_terms": [
+            {"code": "20_yrs", "label": "20 yrs"},
+            {"code": "30_yrs", "label": "30 yrs"}
+          ],
+          "sum_assured_min": 200000,
+          "sum_assured_max": 600000,
+          "default_sum_assured": 300000,
+          "default_term": "20_yrs",
+          "min_age": 18,
+          "max_age": 55,
+          "monthly": 178.30,
+          "yearly": 2032.62,
+          "riders": []
+        },
+        {
+          "code": "ELH",
+          "name": "Essentials Life & Health",
+          "type": "life_health",
+          "covers_dependents": false,
+          "policy_terms": [
+            {"code": "10_yrs", "label": "10 yrs"},
+            {"code": "20_yrs", "label": "20 yrs"}
+          ],
+          "sum_assured_min": 100000,
+          "sum_assured_max": 300000,
+          "default_sum_assured": 150000,
+          "default_term": "10_yrs",
+          "min_age": 18,
+          "max_age": 60,
+          "monthly": 111.34,
+          "yearly": 1269.28,
+          "riders": []
+        }
+      ]
+    }
+  },
+  "forbidden_answer_keys": [
+    "D1",
+    "N5"
+  ]
+}

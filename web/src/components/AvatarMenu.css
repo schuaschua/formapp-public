@@ -1,0 +1,65 @@
+/* Avatar and name, top right of the header, with the small right-aligned "Sign out" menu below
+   (DESIGN.md App header and avatar-menu tokens, UX-DR8). */
+.avatar-menu {
+  position: relative;
+  margin-left: auto;
+}
+
+.avatar-menu__button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-height: var(--target-min-size);
+  padding: 0 var(--spacing-2) 0 var(--spacing-1);
+  border: 0;
+  border-radius: var(--rounded-full);
+  background: transparent;
+  color: var(--app-header-foreground);
+  font: var(--font-caption);
+  cursor: pointer;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border: var(--avatar-ring);
+  border-radius: var(--rounded-full);
+  background: var(--avatar-background);
+  box-shadow: var(--avatar-shadow);
+  color: var(--avatar-foreground);
+  font: var(--font-button);
+}
+
+.avatar-menu__name {
+  overflow-wrap: anywhere;
+}
+
+.avatar-menu__list {
+  position: absolute;
+  top: calc(100% + var(--spacing-2));
+  right: 0;
+  z-index: 3;
+  min-width: var(--avatar-menu-min-width);
+  padding: var(--spacing-2);
+  border-radius: var(--avatar-menu-radius);
+  background: var(--avatar-menu-background);
+  box-shadow: var(--avatar-menu-shadow);
+}
+
+.avatar-menu__item {
+  display: flex;
+  align-items: center;
+  min-height: var(--target-min-size);
+  padding: 0 var(--spacing-3);
+  border-radius: var(--rounded-full);
+  color: var(--avatar-menu-foreground);
+  font: var(--font-button);
+  text-decoration: none;
+}
+
+.avatar-menu__item:hover {
+  background: var(--color-field-read-only);
+}

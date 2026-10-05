@@ -1,0 +1,300 @@
+{
+  "type": "c4-containers",
+  "title": "formapp: containers and tech stack",
+  "spine": "_bmad-output/planning-artifacts/architecture/architecture-formapp-2026-09-25/ARCHITECTURE-SPINE.md",
+  "sources": [
+    "_bmad-output/specs/spec-agent-first-insurance-form/SPEC.md"
+  ],
+  "direction": "TB",
+  "page": {
+    "size": "A2",
+    "orientation": "landscape"
+  },
+  "groups": [
+    {
+      "id": "sys",
+      "label": "formapp (Azure Container Apps, Southeast Asia)",
+      "kind": "boundary",
+      "cite": [
+        "AD-11"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "id": "agentuser",
+      "label": "Insurance agent",
+      "kind": "person",
+      "cite": [
+        "AD-8"
+      ]
+    },
+    {
+      "id": "entra",
+      "label": "Microsoft Entra ID",
+      "kind": "system_ext",
+      "cite": [
+        "AD-18"
+      ]
+    },
+    {
+      "id": "web",
+      "label": "web",
+      "kind": "container",
+      "group": "sys",
+      "tech": "React, Vite, TypeScript",
+      "cite": [
+        "AD-5"
+      ]
+    },
+    {
+      "id": "api",
+      "label": "api",
+      "kind": "container",
+      "group": "sys",
+      "tech": "Python 3.13, FastAPI",
+      "cite": [
+        "AD-2",
+        "AD-10"
+      ]
+    },
+    {
+      "id": "agent",
+      "label": "agent",
+      "kind": "container",
+      "group": "sys",
+      "tech": "Foundry hosted agent",
+      "cite": [
+        "AD-1"
+      ]
+    },
+    {
+      "id": "model",
+      "label": "Model deployment",
+      "kind": "container_ext",
+      "tech": "gpt-5.4-mini (active), gpt-4.1-mini (rollback)",
+      "cite": [
+        "AD-18"
+      ]
+    },
+    {
+      "id": "pg",
+      "label": "PostgreSQL",
+      "kind": "database",
+      "group": "sys",
+      "tech": "PostgreSQL 18",
+      "cite": [
+        "AD-10",
+        "AD-17"
+      ]
+    },
+    {
+      "id": "schema",
+      "label": "form-schema",
+      "kind": "container",
+      "group": "sys",
+      "tech": "JSON Schema",
+      "cite": [
+        "AD-7"
+      ]
+    },
+    {
+      "id": "tokens",
+      "label": "Sign-in token store",
+      "kind": "database",
+      "group": "sys",
+      "tech": "Azure Storage",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "appi",
+      "label": "App Insights",
+      "kind": "system_ext",
+      "cite": [
+        "AD-11"
+      ]
+    },
+    {
+      "id": "speech",
+      "label": "Azure AI Speech",
+      "kind": "container_ext",
+      "tech": "speech to text, en-SG",
+      "cite": [
+        "AD-19"
+      ]
+    },
+    {
+      "id": "job",
+      "label": "feedback job",
+      "kind": "container",
+      "group": "sys",
+      "tech": "Container Apps Job, nightly, api image",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "id": "fbstore",
+      "label": "Feedback export",
+      "kind": "database",
+      "group": "sys",
+      "tech": "Azure Storage, one CSV",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "id": "powerbi",
+      "label": "Power BI",
+      "kind": "system_ext",
+      "cite": [
+        "AD-20"
+      ]
+    }
+  ],
+  "edges": [
+    {
+      "from": "agentuser",
+      "to": "web",
+      "label": "uses",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Structural Seed"
+      ]
+    },
+    {
+      "from": "agentuser",
+      "to": "entra",
+      "label": "signs in",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Structural Seed"
+      ]
+    },
+    {
+      "from": "web",
+      "to": "api",
+      "label": "REST + SSE, speech token",
+      "cite": [
+        "AD-5",
+        "AD-19"
+      ]
+    },
+    {
+      "from": "api",
+      "to": "agent",
+      "label": "chat turns (Responses)",
+      "cite": [
+        "AD-5",
+        "AD-4"
+      ]
+    },
+    {
+      "from": "agent",
+      "to": "api",
+      "label": "MCP tools",
+      "cite": [
+        "AD-1",
+        "AD-3",
+        "AD-4"
+      ]
+    },
+    {
+      "from": "agent",
+      "to": "model",
+      "label": "model calls",
+      "cite": [
+        "AD-1"
+      ]
+    },
+    {
+      "from": "api",
+      "to": "pg",
+      "label": "reads/writes",
+      "cite": [
+        "AD-10"
+      ]
+    },
+    {
+      "from": "api",
+      "to": "schema",
+      "label": "loads",
+      "cite": [
+        "AD-7"
+      ]
+    },
+    {
+      "from": "api",
+      "to": "tokens",
+      "label": "sign-in sessions",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Structural Seed"
+      ]
+    },
+    {
+      "from": "api",
+      "to": "appi",
+      "label": "telemetry",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Consistency Conventions"
+      ]
+    },
+    {
+      "from": "agent",
+      "to": "appi",
+      "label": "telemetry",
+      "cite": [
+        "ARCHITECTURE-SPINE.md Consistency Conventions"
+      ]
+    },
+    {
+      "from": "web",
+      "to": "speech",
+      "label": "audio to text (Speech SDK)",
+      "cite": [
+        "AD-19"
+      ]
+    },
+    {
+      "from": "api",
+      "to": "speech",
+      "label": "mints short-lived token",
+      "cite": [
+        "AD-19"
+      ]
+    },
+    {
+      "from": "job",
+      "to": "pg",
+      "label": "reads feedback, stores category",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "job",
+      "to": "model",
+      "label": "categorises comments",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "job",
+      "to": "fbstore",
+      "label": "overwrites snapshot",
+      "cite": [
+        "AD-20"
+      ]
+    },
+    {
+      "from": "powerbi",
+      "to": "fbstore",
+      "label": "reads snapshot",
+      "cite": [
+        "AD-20"
+      ]
+    }
+  ],
+  "gaps": []
+}

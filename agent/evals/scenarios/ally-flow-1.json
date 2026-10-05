@@ -1,0 +1,108 @@
+{
+  "id": "ally-flow-1",
+  "description": "FR30, FR32, FR36, FR38: Ally's story from Flow 1 -- the name is split, the date converted, N8 set to Yes from 'planning a baby', FSH picked (life and health) with its Maternity & newborn rider added to P2, and the simple, x-fill:default health questions (H7-H15, G1, Y3) are left alone -- already No -- because 'nothing to declare medically' asks for no change (synthetic seed content, NFR24 evaluation set).",
+  "input": "Ally Macbeal, born 20th November 1994, just married, planning a baby, wants life and health cover around RM2,500 a year. Nothing to declare medically.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Ally",
+          "C13": "Macbeal",
+          "C2": "1994-11-20"
+        }
+      }
+    },
+    {
+      "name": "get_products"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "P1": "FSH",
+          "N8": "Yes",
+          "P2": ["FSH-MN"]
+        }
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "get_products": {
+      "products": [
+        {
+          "code": "FSH",
+          "name": "FamilyShield Life & Health",
+          "type": "life_health",
+          "covers_dependents": true,
+          "policy_terms": [
+            {"code": "20_yrs", "label": "20 yrs"},
+            {"code": "30_yrs", "label": "30 yrs"}
+          ],
+          "sum_assured_min": 200000,
+          "sum_assured_max": 600000,
+          "default_sum_assured": 300000,
+          "default_term": "20_yrs",
+          "min_age": 18,
+          "max_age": 55,
+          "monthly": 185.22,
+          "yearly": 2111.51,
+          "riders": [
+            {"code": "FSH-HC", "name": "Hospital cash", "monthly": 17.36, "yearly": 197.95},
+            {"code": "FSH-CI", "name": "Critical illness", "monthly": 28.94, "yearly": 329.92},
+            {"code": "FSH-CC", "name": "Child cover", "monthly": 13.89, "yearly": 158.36},
+            {"code": "FSH-MN", "name": "Maternity & newborn", "monthly": 34.73, "yearly": 395.91}
+          ]
+        },
+        {
+          "code": "ELH",
+          "name": "Essentials Life & Health",
+          "type": "life_health",
+          "covers_dependents": false,
+          "policy_terms": [
+            {"code": "10_yrs", "label": "10 yrs"},
+            {"code": "20_yrs", "label": "20 yrs"}
+          ],
+          "sum_assured_min": 100000,
+          "sum_assured_max": 300000,
+          "default_sum_assured": 150000,
+          "default_term": "10_yrs",
+          "min_age": 18,
+          "max_age": 60,
+          "monthly": 115.76,
+          "yearly": 1319.69,
+          "riders": [
+            {"code": "ELH-HC", "name": "Hospital cash", "monthly": 13.89, "yearly": 158.36},
+            {"code": "ELH-CI", "name": "Critical illness", "monthly": 23.15, "yearly": 263.94}
+          ]
+        }
+      ]
+    },
+    "patch_draft": {
+      "applied": ["C1", "C13", "C2", "P1", "N8", "P2"],
+      "errors": [],
+      "revision": 3
+    }
+  },
+  "forbidden_answer_keys": [
+    "D1",
+    "Y3",
+    "H7",
+    "H8",
+    "H9",
+    "H10",
+    "H11",
+    "H12",
+    "H13",
+    "H14",
+    "H15",
+    "G1"
+  ]
+}

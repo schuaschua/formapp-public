@@ -1,0 +1,55 @@
+{
+  "id": "find-customer-ally",
+  "description": "Story 5.1: once the agent has first name, last name and date of birth and no customer is linked yet, it searches for a returning customer before asking anything else (synthetic seed content).",
+  "input": "My customer is Ally Macbeal, born 20th November 1994.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    },
+    {
+      "name": "patch_draft",
+      "arguments": {
+        "answers": {
+          "C1": "Ally",
+          "C13": "Macbeal",
+          "C2": "1994-11-20"
+        }
+      }
+    },
+    {
+      "name": "find_customer",
+      "arguments": {
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20"
+      }
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 1,
+      "answers": {}
+    },
+    "patch_draft": {
+      "applied": [
+        "C1",
+        "C13",
+        "C2"
+      ],
+      "errors": [],
+      "revision": 2
+    },
+    "find_customer": [
+      {
+        "customer_id": "00000000-0000-4000-8000-000000000001",
+        "first_name": "Ally",
+        "last_name": "Macbeal",
+        "date_of_birth": "1994-11-20",
+        "city": "Petaling Jaya"
+      }
+    ]
+  },
+  "forbidden_answer_keys": [
+    "D1"
+  ]
+}

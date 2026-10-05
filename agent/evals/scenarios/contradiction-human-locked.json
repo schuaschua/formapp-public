@@ -1,0 +1,29 @@
+{
+  "id": "contradiction-human-locked",
+  "description": "FR50, FR33, AD-6: the same kind of contradiction, but 'get_draft' shows Y1 was set by a human (the insurance agent edited it on the form) -- the agent must not try to patch it, and says instead that it can't change it (synthetic seed content).",
+  "input": "Actually, she pays monthly, not yearly.",
+  "expected_calls": [
+    {
+      "name": "get_draft"
+    }
+  ],
+  "tool_results": {
+    "get_draft": {
+      "revision": 4,
+      "answers": {
+        "P1": "FSH",
+        "Y1": "yearly",
+        "Y2": "credit_card"
+      },
+      "provenance": {
+        "P1": {"source": "ai", "updated_at": "2026-09-27T09:00:00Z"},
+        "Y1": {"source": "human", "updated_at": "2026-09-27T09:05:00Z"},
+        "Y2": {"source": "ai", "updated_at": "2026-09-27T09:00:00Z"}
+      }
+    }
+  },
+  "forbidden_answer_keys": [
+    "D1",
+    "Y1"
+  ]
+}

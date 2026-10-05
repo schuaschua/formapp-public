@@ -1,0 +1,128 @@
+/* The declaration and feedback modals (Story 3.3, DESIGN.md Components "Modal"/"Declaration
+   box"/"Rating tiles"). */
+
+.submit-modal__scrim {
+  position: fixed;
+  inset: 0;
+  background: var(--modal-scrim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-screen-padding);
+  z-index: 100;
+}
+
+.submit-modal {
+  background: var(--modal-background);
+  border-radius: var(--modal-radius);
+  box-shadow: var(--modal-shadow);
+  width: var(--modal-width);
+  max-width: 100%;
+  max-height: calc(100vh - var(--spacing-6) * 2);
+  overflow-y: auto;
+  padding: 34px 38px 30px;
+}
+
+.submit-modal:focus {
+  outline: none;
+}
+
+.submit-modal__title {
+  font: var(--font-headline-lg);
+  letter-spacing: var(--font-headline-lg-letter-spacing);
+  color: var(--color-ink-heading);
+  margin: 0 0 var(--spacing-5);
+}
+
+.submit-modal__declaration-box {
+  background: var(--declaration-box-background);
+  border: var(--declaration-box-border);
+  border-radius: var(--declaration-box-radius);
+  font: var(--font-declaration);
+  color: var(--color-ink-heading);
+  padding: var(--spacing-5);
+  margin: 0;
+}
+
+.submit-modal__field {
+  margin-top: var(--spacing-5);
+}
+
+.submit-modal__label {
+  display: block;
+  font: var(--font-caption);
+  color: var(--color-ink-body);
+  margin-bottom: var(--spacing-2);
+}
+
+.submit-modal__comment {
+  width: 100%;
+  min-height: 96px;
+  background: var(--color-white);
+  border: 1px solid var(--color-border-field);
+  border-radius: 14px;
+  font: var(--font-body);
+  color: var(--color-ink-body);
+  padding: var(--spacing-3) var(--spacing-4);
+  box-sizing: border-box;
+  resize: vertical;
+}
+
+.submit-modal__comment:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.submit-modal__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--spacing-3);
+  margin-top: var(--spacing-6);
+}
+
+.rating-tiles {
+  display: flex;
+  gap: var(--spacing-2);
+}
+
+.rating-tile {
+  flex: 1;
+  height: 64px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  background: var(--rating-tile-background);
+  border: var(--rating-tile-border);
+  border-radius: var(--rating-tile-radius);
+  cursor: pointer;
+  font: var(--font-button);
+  color: var(--color-ink-body);
+}
+
+.rating-tile:focus-visible {
+  outline: var(--focus-ring-width) solid var(--focus-ring-color);
+  outline-offset: var(--focus-ring-offset);
+}
+
+.rating-tile--selected {
+  background: var(--rating-tile-selected-background);
+  border-color: var(--rating-tile-selected-border);
+  color: var(--rating-tile-selected-foreground);
+}
+
+.rating-tile__star {
+  font-size: 20px;
+  color: var(--rating-tile-star);
+  line-height: 1;
+}
+
+.rating-tile__star--filled {
+  color: var(--rating-tile-star-filled);
+}
+
+.rating-tile__number {
+  font-size: 14px;
+}
